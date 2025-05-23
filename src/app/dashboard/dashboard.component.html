@@ -1,0 +1,114 @@
+<!-- Dashboard Content -->
+<div class="p-6">
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+    <div class="bg-white p-6 rounded-lg shadow">
+      <h3 class="text-lg font-semibold text-gray-700">
+        Total Used Electricity
+      </h3>
+      <p class="text-3xl font-bold text-blue-600">1,234 kWh</p>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow">
+      <h3 class="text-lg font-semibold text-gray-700">Total Used Water</h3>
+      <p class="text-3xl font-bold text-green-600">567 m³</p>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow">
+      <h3 class="text-lg font-semibold text-gray-700">Total Payment</h3>
+      <p class="text-3xl font-bold text-purple-600">$789</p>
+    </div>
+  </div>
+
+  <!-- Room Blocks and Charts -->
+  <div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
+    <!-- Room Blocks -->
+    <div class="bg-white p-6 rounded-lg shadow">
+      <h3 class="text-lg font-semibold text-gray-700 mb-4">Room Details</h3>
+      <div class="inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Room 1 -->
+        <div class="border rounded-lg p-4">
+          <h4 class="text-md font-semibold text-gray-800 mb-2">Room A101</h4>
+          <div class="space-y-2">
+            <div>
+              <p class="text-sm font-medium text-gray-700">Electricity</p>
+              <p class="text-sm text-gray-600">Past: 100 kWh</p>
+              <p class="text-sm text-gray-600">Current: 120 kWh</p>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-700">Water</p>
+              <p class="text-sm text-gray-600">Past: 12 m³</p>
+              <p class="text-sm text-gray-600">Current: 15 m³</p>
+            </div>
+            <p class="text-sm text-red-500">Unpaid Payment: $50</p>
+          </div>
+        </div>
+        <!-- Room 2 -->
+        <div class="border rounded-lg p-4">
+          <h4 class="text-md font-semibold text-gray-800 mb-2">Room B204</h4>
+          <div class="space-y-2">
+            <div>
+              <p class="text-sm font-medium text-gray-700">Electricity</p>
+              <p class="text-sm text-gray-600">Past: 70 kWh</p>
+              <p class="text-sm text-gray-600">Current: 80 kWh</p>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-700">Water</p>
+              <p class="text-sm text-gray-600">Past: 8 m³</p>
+              <p class="text-sm text-gray-600">Current: 10 m³</p>
+            </div>
+            <p class="text-sm text-red-500">Unpaid Payment: $30</p>
+          </div>
+        </div>
+        <!-- Room 3 -->
+        <div class="border rounded-lg p-4">
+          <h4 class="text-md font-semibold text-gray-800 mb-2">Room C305</h4>
+          <div class="space-y-2">
+            <div>
+              <p class="text-sm font-medium text-gray-700">Electricity</p>
+              <p class="text-sm text-gray-600">Past: 130 kWh</p>
+              <p class="text-sm text-gray-600">Current: 150 kWh</p>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-700">Water</p>
+              <p class="text-sm text-gray-600">Past: 18 m³</p>
+              <p class="text-sm text-gray-600">Current: 20 m³</p>
+            </div>
+            <p class="text-sm text-red-500">Unpaid Payment: $75</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Usage Charts -->
+    <div class="bg-white p-6 rounded-lg shadow">
+      <h3 class="text-lg font-semibold text-gray-700 mb-4">Usage Overview</h3>
+      <div class="grid grid-cols-1 gap-6">
+        <!-- Electricity Usage Chart -->
+        <div class="h-64">
+          <h4 class="text-md font-semibold text-gray-700 mb-2">
+            Electricity Usage
+          </h4>
+          <div class="relative h-full">
+            <canvas
+              baseChart
+              [data]="electricityData"
+              [options]="electricityOptions"
+              type="bar"
+            ></canvas>
+          </div>
+        </div>
+        <!-- Water Usage Chart -->
+        <div class="h-64">
+          <h4 class="text-md font-semibold text-gray-700 mb-2">Water Usage</h4>
+          <div class="relative h-full">
+            <canvas
+              baseChart
+              [data]="waterData"
+              [options]="waterOptions"
+              type="bar"
+            ></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
