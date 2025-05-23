@@ -16,6 +16,7 @@
     "@angular/forms": "^19.0.0",
     "@angular/platform-browser": "^19.0.0",
     "@angular/router": "^19.0.0",
+    "json-server": "^1.0.0-beta.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
@@ -24,8 +25,11 @@
     "@angular-devkit/build-angular": "^19.0.0",
     "@angular/cli": "^19.0.0",
     "@angular/compiler-cli": "^19.0.0",
+    "@tailwindcss/forms": "latest",
+    "@tailwindcss/typography": "latest",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^16.11.35",
+    "autoprefixer": "^10.4.7",
     "copyfiles": "^2.4.1",
     "jasmine-core": "~5.6.0",
     "jasmine-marbles": "~0.9.2",
@@ -35,7 +39,10 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "ngx-tailwind": "^4.0.0",
+    "postcss": "^8.4.14",
     "protractor": "^7.0.0",
+    "tailwindcss": "^3.4.17",
     "ts-node": "~10.9.0",
     "typescript": "~5.8.0"
   }
