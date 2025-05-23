@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { ChartConfiguration, ChartData } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
+import { SensorDataService } from '../../services/sensor-data.service';
+import { WaterData } from '../../interfaces/water-data';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,6 +11,7 @@ import { BaseChartDirective } from 'ng2-charts';
   imports: [BaseChartDirective],
 })
 export class DashboardComponent {
+  
   // Chart labels (shared for both charts)
   public chartLabels: string[] = [
     'Mon',
@@ -89,4 +92,10 @@ export class DashboardComponent {
       },
     },
   };
+
+  constructor() {
+    const sensorDataService: SensorDataService = new SensorDataService();
+    let waterData = sensorDataService.getWaterInfo('water', 'node_1', 'water1');
+    console.log(waterData);
+  }
 }
