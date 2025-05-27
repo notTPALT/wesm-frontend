@@ -14,38 +14,43 @@ export class SensorDataService {
   getWaterInfo(
     nodeId: string,
     sensorId: string,
-    rows: string | undefined = undefined,
-    date: string | undefined = undefined
+    rows: number = 1,
+    date: number = -1
   ) {
     var baseParams = new HttpParams();
     baseParams = baseParams.set('type', 'water');
     baseParams = baseParams.set('node_id', nodeId);
     baseParams = baseParams.set('sensor_id', sensorId);
-
-    if (rows !== undefined) {
-      baseParams = baseParams.set('rows', rows);
-    }
-    if (date !== undefined) {
-      baseParams = baseParams.set('date', date);
-    }
+    baseParams = baseParams.set('rows', rows.toString());
+    if (date !== -1) baseParams = baseParams.set('date', date.toString());
 
     return this.http.get<WaterData[] | undefined>(
       this.baseUrl,
       {
         params: baseParams,
       }
-    ) as Observable<WaterData[] | undefined>;
+    );
+  }
 
-    // this.http.get<WaterData | undefined>(
-    //   this.baseUrl,
-    //   {
-    //     params: baseParams,
-    //   }
-    // ).subscribe((result) => {
-    //   this.fetchedData = result;
-    //   return this.fetchedData;
-    // })
-    // return undefined;
+  getElecInfo(
+    nodeId: string,
+    sensorId: string,
+    rows: number = 1,
+    date: number = -1
+  ) {
+    var baseParams = new HttpParams();
+    baseParams = baseParams.set('type', 'elec');
+    baseParams = baseParams.set('node_id', nodeId);
+    baseParams = baseParams.set('sensor_id', sensorId);
+    baseParams = baseParams.set('rows', rows.toString());
+    if (date !== -1) baseParams = baseParams.set('date', date.toString());
+
+    return this.http.get<ElecData[] | undefined>(
+      this.baseUrl,
+      {
+        params: baseParams,
+      }
+    );
   }
 
   constructor() {}
