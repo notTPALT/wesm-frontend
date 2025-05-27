@@ -21,6 +21,8 @@ import { RoomBriefData } from '../../interfaces/room-brief-data';
 export class DashboardComponent {
   private sensorDataService: SensorDataService = inject(SensorDataService);
   public roomsBriefData: RoomBriefData[] = [];
+  public waterUsageLast30Days: number = -1;
+  public elecUsageLast30Days: number = -1;
 
   private async getWaterUsage(
     index: number,
@@ -98,14 +100,37 @@ export class DashboardComponent {
   // Currently there are only 2 rooms available, so it will be hardcoded.
   // Should use something like $ROOMS env variable instead.
   private async getBriefAllRooms() {
-    this.roomsBriefData = this.roomsBriefData || {};
     for (let i = 1; i <= 2; i++) {
       let roomBrief: RoomBriefData = await this.getRoomBrief(i);
       this.roomsBriefData.push(roomBrief);
     }
   }
 
+  private async getWaterUsageLast30Days() {
+    try {
+      var result = await lastValueFrom(this.sensorDataService.getTotalWaterLast30Days());
+      if (result) {
+        this.waterUsageLast30Days = result[0].total_usage ?? -1;
+      }
+    } catch (error) {
+      console.error('Error while fetching total water usage: ', error);
+    }
+  }
+
+  private async getElecUsageLast30Days() {
+    try {
+      var result = await lastValueFrom(this.sensorDataService.getTotalElecLast30Days());
+      if (result) {
+        this.elecUsageLast30Days = result[0].total_usage ?? -1;
+      }
+    } catch (error) {
+      console.error('Error while fetching total electricity usage: ', error);
+    }
+  }
+
   constructor() {
     this.getBriefAllRooms();
+    this.getWaterUsageLast30Days();
+    this.getElecUsageLast30Days();
   }
 }

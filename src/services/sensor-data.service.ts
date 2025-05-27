@@ -46,6 +46,24 @@ export class SensorDataService {
       params: baseParams,
     });
   }
+  
+  getTotalWaterLast30Days() {
+    var baseParams = new HttpParams();
+    baseParams = baseParams.set('type', 'water30');
+    
+    return this.http.get<any | undefined>(this.baseUrl, {
+      params: baseParams,
+    });
+  }
+
+  getTotalElecLast30Days() {
+    var baseParams = new HttpParams();
+    baseParams = baseParams.set('type', 'elec30');
+    
+    return this.http.get<any | undefined>(this.baseUrl, {
+      params: baseParams,
+    });
+  }
 
   constructor() {}
 }
