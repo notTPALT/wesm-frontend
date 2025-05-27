@@ -2,12 +2,10 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SensorDataService } from '../../services/sensor-data.service';
 import { lastValueFrom } from 'rxjs';
-import { WaterData } from '../../interfaces/water-data';
 import { RoomBriefComponent } from '../room-brief/room-brief.component';
 import { ElectricityBriefComponent } from '../electricity-brief/electricity-brief.component';
 import { WaterBriefComponent } from '../water-brief/water-brief.component';
 import { RoomBriefData } from '../../interfaces/room-brief-data';
-import { ElecData } from '../../interfaces/elec-data';
 
 @Component({
   imports: [CommonModule, RoomBriefComponent, ElectricityBriefComponent, WaterBriefComponent],
@@ -17,7 +15,7 @@ import { ElecData } from '../../interfaces/elec-data';
 })
 export class DashboardComponent {
   private sensorDataService: SensorDataService = inject(SensorDataService); 
-  public roomsBriefData!: RoomBriefData[];
+  public roomsBriefData: RoomBriefData[] = [];
 
   private async getWaterUsage(index: number, date: number = -1, rows: number = 1) {
     try {
@@ -73,7 +71,8 @@ export class DashboardComponent {
     this.roomsBriefData = this.roomsBriefData || {};
     for (let i = 1; i <= 2; i++) {
       let roomBrief: RoomBriefData = await this.getRoomBrief(i);
-      this.roomsBriefData[i] = roomBrief;
+      this.roomsBriefData.push(roomBrief);
+      console.log(this.roomsBriefData);
     }
   }
 

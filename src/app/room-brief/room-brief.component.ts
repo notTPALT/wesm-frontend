@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { RoomBriefData } from '../../interfaces/room-brief-data';
 
 @Component({
   selector: 'app-room-brief',
@@ -7,4 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './room-brief.component.css'
 })
 export class RoomBriefComponent {
+  @Input() roomData!: RoomBriefData;
 }
