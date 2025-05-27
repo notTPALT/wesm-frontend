@@ -1,7 +1,9 @@
 export interface ElecData {
-    sensor_id: String,
-    node_id: String,
-    timestamp: Date,
-    power: Number,
-    voltage: Number
-};
+    node_id: string;
+    sensor_id: string;
+    power?: number;
+    timestamp?: string;
+    _id?: string;
+    __v?: number;
+  }
+  

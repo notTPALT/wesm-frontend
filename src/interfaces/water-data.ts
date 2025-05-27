@@ -1,6 +1,8 @@
 export interface WaterData {
-    sensor_id: String,
-    node_id: String,
-    timestamp: Date,
-    water: Number
+  node_id: string;
+  sensor_id: string;
+  water?: number;
+  timestamp?: string;
+  _id?: string;
+  __v?: number;
 }

@@ -1,101 +1,46 @@
-import { Component } from '@angular/core';
+import { Component, inject, Input, ResourceStatus } from '@angular/core';
 import { ChartConfiguration, ChartData } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { SensorDataService } from '../../services/sensor-data.service';
+import { lastValueFrom } from 'rxjs';
 import { WaterData } from '../../interfaces/water-data';
+import { RoomBriefComponent } from '../room-brief/room-brief.component';
+import { ElectricityBriefComponent } from '../electricity-brief/electricity-brief.component';
+import { WaterBriefComponent } from '../water-brief/water-brief.component';
 
 @Component({
+  imports: [RoomBriefComponent, ElectricityBriefComponent, WaterBriefComponent],
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  imports: [BaseChartDirective],
 })
 export class DashboardComponent {
-  
-  // Chart labels (shared for both charts)
-  public chartLabels: string[] = [
-    'Mon',
-    'Tue',
-    'Wed',
-    'Thu',
-    'Fri',
-    'Sat',
-    'Sun',
-  ];
+  private sensorDataService: SensorDataService = inject(SensorDataService); 
+  public waterDatas!: WaterData;
 
-  // Electricity chart data
-  public electricityData: ChartData<'bar'> = {
-    labels: this.chartLabels,
-    datasets: [
-      {
-        label: 'Electricity (kWh)',
-        data: [150, 180, 160, 200, 170, 190, 210],
-        backgroundColor: 'rgba(59, 130, 246, 0.6)', // Blue
-        borderColor: 'rgba(59, 130, 246, 1)',
-        borderWidth: 1,
-      },
-    ],
-  };
+  private async getWaterData() {
+    try {
+      this.waterDatas = this.waterDatas || {};
+      const result = await lastValueFrom(this.sensorDataService.getWaterInfo('node_1', 'water1'));
+      if (result) {
+        this.waterDatas.node_id = result[0].node_id;
+        this.waterDatas.sensor_id = result[0].sensor_id;
+        this.waterDatas.water = result[0].water;
+        var a = document.getElementById("total-water");
+        if (a && this.waterDatas.water) a.textContent = this.waterDatas.water.toString();
+      } else {
+        console.error('Result is undefined or not an array with data');
+      }
 
-  // Water chart data
-  public waterData: ChartData<'bar'> = {
-    labels: this.chartLabels,
-    datasets: [
-      {
-        label: 'Water (m³)',
-        data: [10, 12, 8, 15, 11, 13, 14],
-        backgroundColor: 'rgba(34, 197, 94, 0.6)', // Green
-        borderColor: 'rgba(34, 197, 94, 1)',
-        borderWidth: 1,
-      },
-    ],
-  };
+    } catch (error) {
+      console.error('Error fetching water data:', error);
+    }
 
-  // Electricity chart options
-  public electricityOptions: ChartConfiguration['options'] = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      y: {
-        beginAtZero: true,
-        title: { display: true, text: 'kWh' },
-      },
-      x: {
-        title: { display: true, text: 'Day' },
-      },
-    },
-    plugins: {
-      legend: {
-        display: true,
-        position: 'top',
-      },
-    },
-  };
-
-  // Water chart options
-  public waterOptions: ChartConfiguration['options'] = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      y: {
-        beginAtZero: true,
-        title: { display: true, text: 'm³' },
-      },
-      x: {
-        title: { display: true, text: 'Day' },
-      },
-    },
-    plugins: {
-      legend: {
-        display: true,
-        position: 'top',
-      },
-    },
-  };
+  }
 
   constructor() {
-    const sensorDataService: SensorDataService = new SensorDataService();
-    let waterData = sensorDataService.getWaterInfo('water', 'node_1', 'water1');
-    console.log(waterData);
+    this.getWaterData();
   }
+  
+  
 }
