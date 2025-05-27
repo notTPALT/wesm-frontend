@@ -10,52 +10,48 @@ export class SensorDataService {
   http: HttpClient = inject(HttpClient);
   baseUrl: string = 'http://localhost:3000/api/get';
 
-  getWaterInfo(
-    nodeId: string,
-    sensorId: string,
-    date: number = -1
-  ) {
+  fetchWaterData(sensorId: string, date: string | undefined = undefined) {
     var baseParams = new HttpParams();
     baseParams = baseParams.set('type', 'water');
-    baseParams = baseParams.set('node_id', nodeId);
     baseParams = baseParams.set('sensor_id', sensorId);
-    if (date !== -1) baseParams = baseParams.set('date', date.toString());
+    if (date !== undefined) baseParams = baseParams.set('date', date);
 
     return this.http.get<WaterData[] | undefined>(this.baseUrl, {
       params: baseParams,
     });
   }
 
-  getElecInfo(
-    nodeId: string,
-    sensorId: string,
-    date: number = -1
-  ) {
+  fetchWaterDataRange(sensorId: string, startDate: string, endDate: string) {
+    var baseParams = new HttpParams();
+    baseParams = baseParams.set('type', 'water');
+    baseParams = baseParams.set('sensor_id', sensorId);
+    baseParams = baseParams.set('start_date', startDate);
+    baseParams = baseParams.set('end_date', endDate);
+
+    return this.http.get<WaterData[] | undefined>(`${this.baseUrl}/range`, {
+      params: baseParams,
+    });
+  }
+
+  fetchElecData(sensorId: string, date: string | undefined = undefined) {
     var baseParams = new HttpParams();
     baseParams = baseParams.set('type', 'elec');
-    baseParams = baseParams.set('node_id', nodeId);
     baseParams = baseParams.set('sensor_id', sensorId);
-    if (date !== -1) baseParams = baseParams.set('date', date.toString());
+    if (date !== undefined) baseParams = baseParams.set('date', date);
 
     return this.http.get<ElecData[] | undefined>(this.baseUrl, {
       params: baseParams,
     });
   }
-  
-  getTotalWaterLast30Days() {
-    var baseParams = new HttpParams();
-    baseParams = baseParams.set('type', 'water30');
-    
-    return this.http.get<any | undefined>(this.baseUrl, {
-      params: baseParams,
-    });
-  }
 
-  getTotalElecLast30Days() {
+  fetchElecDataRange(sensorId: string, startDate: string, endDate: string) {
     var baseParams = new HttpParams();
-    baseParams = baseParams.set('type', 'elec30');
-    
-    return this.http.get<any | undefined>(this.baseUrl, {
+    baseParams = baseParams.set('type', 'elec');
+    baseParams = baseParams.set('sensor_id', sensorId);
+    baseParams = baseParams.set('start_date', startDate);
+    baseParams = baseParams.set('end_date', endDate);
+
+    return this.http.get<ElecData[] | undefined>(`${this.baseUrl}/range`, {
       params: baseParams,
     });
   }
