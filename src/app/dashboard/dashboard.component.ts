@@ -8,18 +8,34 @@ import { WaterBriefComponent } from '../water-brief/water-brief.component';
 import { RoomBriefData } from '../../interfaces/room-brief-data';
 
 @Component({
-  imports: [CommonModule, RoomBriefComponent, ElectricityBriefComponent, WaterBriefComponent],
+  imports: [
+    CommonModule,
+    RoomBriefComponent,
+    ElectricityBriefComponent,
+    WaterBriefComponent,
+  ],
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent {
-  private sensorDataService: SensorDataService = inject(SensorDataService); 
+  private sensorDataService: SensorDataService = inject(SensorDataService);
   public roomsBriefData: RoomBriefData[] = [];
 
-  private async getWaterUsage(index: number, date: number = -1, rows: number = 1) {
+  private async getWaterUsage(
+    index: number,
+    date: number = -1,
+    rows: number = 1
+  ) {
     try {
-      const result = await lastValueFrom(this.sensorDataService.getWaterInfo('node_1', `water${index}`, rows, date));
+      const result = await lastValueFrom(
+        this.sensorDataService.getWaterInfo(
+          'node_1',
+          `water${index}`,
+          rows,
+          date
+        )
+      );
       if (result) {
         return result[0].water ?? -1;
       } else {
@@ -32,9 +48,20 @@ export class DashboardComponent {
     return -1;
   }
 
-  private async getElecUsage(index: number, date: number = -1, rows: number = 1) {
+  private async getElecUsage(
+    index: number,
+    date: number = -1,
+    rows: number = 1
+  ) {
     try {
-      const result = await lastValueFrom(this.sensorDataService.getElecInfo('node_2', `power${index}`, rows, date));
+      const result = await lastValueFrom(
+        this.sensorDataService.getElecInfo(
+          'node_2',
+          `power${index}`,
+          rows,
+          date
+        )
+      );
       if (result) {
         return result[0].power ?? -1;
       } else {
@@ -59,7 +86,10 @@ export class DashboardComponent {
       roomBrief.waterCurrent = await this.getWaterUsage(index);
       roomBrief.unpaidAmount = Math.floor(Math.random() * 1000); // Idk the formula, feel free to modify this
     } catch (error) {
-      console.error(`Unable to get completed data for room ${index}. Error: `, error);
+      console.error(
+        `Unable to get completed data for room ${index}. Error: `,
+        error
+      );
     }
 
     return roomBrief;
@@ -72,14 +102,10 @@ export class DashboardComponent {
     for (let i = 1; i <= 2; i++) {
       let roomBrief: RoomBriefData = await this.getRoomBrief(i);
       this.roomsBriefData.push(roomBrief);
-      console.log(this.roomsBriefData);
     }
   }
 
   constructor() {
     this.getBriefAllRooms();
-    console.log(this.roomsBriefData);
   }
-  
-  
 }

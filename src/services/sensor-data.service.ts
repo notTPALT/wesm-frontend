@@ -24,12 +24,9 @@ export class SensorDataService {
     baseParams = baseParams.set('rows', rows.toString());
     if (date !== -1) baseParams = baseParams.set('date', date.toString());
 
-    return this.http.get<WaterData[] | undefined>(
-      this.baseUrl,
-      {
-        params: baseParams,
-      }
-    );
+    return this.http.get<WaterData[] | undefined>(this.baseUrl, {
+      params: baseParams,
+    });
   }
 
   getElecInfo(
@@ -45,12 +42,9 @@ export class SensorDataService {
     baseParams = baseParams.set('rows', rows.toString());
     if (date !== -1) baseParams = baseParams.set('date', date.toString());
 
-    return this.http.get<ElecData[] | undefined>(
-      this.baseUrl,
-      {
-        params: baseParams,
-      }
-    );
+    return this.http.get<ElecData[] | undefined>(this.baseUrl, {
+      params: baseParams,
+    });
   }
 
   constructor() {}
