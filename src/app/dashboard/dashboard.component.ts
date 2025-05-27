@@ -24,22 +24,15 @@ export class DashboardComponent {
   public waterUsageLast30Days: number = -1;
   public elecUsageLast30Days: number = -1;
 
-  private async getWaterUsage(
-    index: number,
-    date: number = -1,
-    rows: number = 1
-  ) {
+  // The following functions assume that the sensors only send data to database once a day.
+  // Beware of that.
+  private async getWaterUsage(index: number, date: number = -1) {
     try {
       const result = await lastValueFrom(
-        this.sensorDataService.getWaterInfo(
-          'node_1',
-          `water${index}`,
-          rows,
-          date
-        )
+        this.sensorDataService.getWaterInfo('node_1', `water${index}`, date)
       );
       if (result) {
-        return result[0].water ?? -1;
+        return result;
       } else {
         console.error('Result is undefined or not an array with data');
       }
@@ -47,25 +40,16 @@ export class DashboardComponent {
       console.error('Error fetching water data:', error);
     }
 
-    return -1;
+    return [];
   }
 
-  private async getElecUsage(
-    index: number,
-    date: number = -1,
-    rows: number = 1
-  ) {
+  private async getElecUsage(index: number, date: number = -1) {
     try {
       const result = await lastValueFrom(
-        this.sensorDataService.getElecInfo(
-          'node_2',
-          `power${index}`,
-          rows,
-          date
-        )
+        this.sensorDataService.getElecInfo('node_2', `power${index}`, date)
       );
       if (result) {
-        return result[0].power ?? -1;
+        return result;
       } else {
         console.error('Result is undefined or not an array with data');
       }
@@ -73,7 +57,7 @@ export class DashboardComponent {
       console.error('Error/Warning fetching electricity data:', error);
     }
 
-    return -1;
+    return [];
   }
 
   private async getRoomBrief(index: number) {
@@ -82,10 +66,12 @@ export class DashboardComponent {
     try {
       roomBrief = roomBrief || {};
 
-      roomBrief.elecPast = await this.getElecUsage(index, pastDate);
-      roomBrief.elecCurrent = await this.getElecUsage(index);
-      roomBrief.waterPast = await this.getWaterUsage(index, pastDate);
-      roomBrief.waterCurrent = await this.getWaterUsage(index);
+      roomBrief.elecPast =
+        (await this.getElecUsage(index, pastDate))[0].power ?? -1;
+      roomBrief.elecCurrent = (await this.getElecUsage(index))[0].power ?? -1;
+      roomBrief.waterPast =
+        (await this.getWaterUsage(index, pastDate))[0].water ?? -1;
+      roomBrief.waterCurrent = (await this.getWaterUsage(index))[0].water ?? -1;
       roomBrief.unpaidAmount = Math.floor(Math.random() * 1000); // Idk the formula, feel free to modify this
     } catch (error) {
       console.error(
@@ -108,7 +94,9 @@ export class DashboardComponent {
 
   private async getWaterUsageLast30Days() {
     try {
-      var result = await lastValueFrom(this.sensorDataService.getTotalWaterLast30Days());
+      var result = await lastValueFrom(
+        this.sensorDataService.getTotalWaterLast30Days()
+      );
       if (result) {
         this.waterUsageLast30Days = result[0].total_usage ?? -1;
       }
@@ -119,12 +107,30 @@ export class DashboardComponent {
 
   private async getElecUsageLast30Days() {
     try {
-      var result = await lastValueFrom(this.sensorDataService.getTotalElecLast30Days());
+      var result = await lastValueFrom(
+        this.sensorDataService.getTotalElecLast30Days()
+      );
       if (result) {
         this.elecUsageLast30Days = result[0].total_usage ?? -1;
       }
     } catch (error) {
       console.error('Error while fetching total electricity usage: ', error);
+    }
+  }
+
+  private async buildElecChartData() {
+    var elecData = [];
+    var elecChartData = [];
+    var chartLabels = [];
+    for (let i = -29; i <= 0; i++) {
+      chartLabels.push(
+        new Date(new Date().getTime() + i * 24 * 60 * 60 * 1000).getUTCDate()
+      );
+    }
+    for (let i = 1; i <= 2; i++) {
+      let oneElec = await this.getElecUsage(i, -1);
+      // The following code assume that
+      elecData.push(oneElec);
     }
   }
 
