@@ -1,30 +1,25 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ChartConfiguration, ChartData } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
   selector: 'app-electricity-brief',
+  standalone: true, // Add this if using standalone components
   imports: [BaseChartDirective],
   templateUrl: './electricity-brief.component.html',
-  styleUrl: './electricity-brief.component.css'
+  styleUrls: ['./electricity-brief.component.css']
 })
-export class ElectricityBriefComponent {
-  public chartLabels: string[] = [
-    'Mon',
-    'Tue',
-    'Wed',
-    'Thu',
-    'Fri',
-    'Sat',
-    'Sun',
-  ];
-  // Electricity chart data
+export class ElectricityBriefComponent implements OnChanges {
+  @Input() chartLabels: string[] = [];
+  @Input() chartData: number[] = [];
+
+  // Initialize electricityData with empty values
   public electricityData: ChartData<'bar'> = {
-    labels: this.chartLabels,
+    labels: [],
     datasets: [
       {
         label: 'Electricity (kWh)',
-        data: [150, 180, 160, 200, 170, 190, 210],
+        data: [],
         backgroundColor: 'rgba(59, 130, 246, 0.6)', // Blue
         borderColor: 'rgba(59, 130, 246, 1)',
         borderWidth: 1,
@@ -52,4 +47,25 @@ export class ElectricityBriefComponent {
       },
     },
   };
+
+  constructor() {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['chartLabels'] || changes['chartData']) {
+      // Update electricityData when inputs change
+      this.electricityData = {
+        labels: this.chartLabels || [],
+        datasets: [
+          {
+            label: 'Electricity (kWh)',
+            data: this.chartData || [],
+            backgroundColor: 'rgba(59, 130, 246, 0.6)',
+            borderColor: 'rgba(59, 130, 246, 1)',
+            borderWidth: 1,
+          },
+        ],
+      };
+      console.log('Updated electricityData:', this.electricityData);
+    }
+  }
 }

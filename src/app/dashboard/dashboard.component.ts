@@ -1,7 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SensorDataService } from '../../services/sensor-data.service';
-import { lastValueFrom } from 'rxjs';
+import { last, lastValueFrom } from 'rxjs';
 import { RoomBriefComponent } from '../room-brief/room-brief.component';
 import { ElectricityBriefComponent } from '../electricity-brief/electricity-brief.component';
 import { WaterBriefComponent } from '../water-brief/water-brief.component';
@@ -18,14 +18,36 @@ import { RoomBriefData } from '../../interfaces/room-brief-data';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   private sensorDataService: SensorDataService = inject(SensorDataService);
+  private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
   public roomsBriefData: RoomBriefData[] = [];
   public totalWaterUsageLast30Days: number = -1;
   public totalElecUsageLast30Days: number = -1;
+  public chartLabels: string[] = [];
+  public elecChartData: number[] = [];
+  public waterChartData: number[] = [];
+
+  async ngOnInit() {
+    await Promise.all([
+      this.getBriefAllRooms(),
+      this.getTotalWaterUsageLast30Days(),
+      this.getTotalElecUsageLast30Days(),
+      this.buildChartLabels(),
+      this.buildElecChartData(2),
+      this.buildWaterChartData(2)
+    ]);
+    this.chartLabels = [...this.chartLabels];
+    this.elecChartData = [...this.elecChartData];
+    this.waterChartData = [...this.waterChartData];
+    this.cdr.detectChanges();
+  }
 
   // The following functions assume that the sensors only send data to database once a day.
   // Beware of that.
+
+  // TODO: Handle a case when there're no data available for requested day (Should get
+  // the nearest lower date's record instead)
   private async getWaterUsage(
     index: number,
     date: string | undefined = undefined
@@ -160,22 +182,129 @@ export class DashboardComponent {
     this.totalElecUsageLast30Days = latest;
   }
 
-  private async buildElecChartData() {
-    var elecData = [];
-    var elecChartData = [];
-    var chartLabels = [];
+  private async buildChartLabels() {
     for (let i = -29; i <= 0; i++) {
-      chartLabels.push(
+      this.chartLabels.push(
         new Date(new Date().getTime() + i * 24 * 60 * 60 * 1000)
           .getUTCDate()
           .toString()
       );
     }
   }
+  
+  private async buildElecChartData(sensorCount: number) {
+    try {
+      let elecFetchedUsageData: { [date: string]: number } = {};
+      for (let i = -29; i <= 0; i++) {
+        elecFetchedUsageData[this.chartLabels[i + 29]] = 0;
+        this.elecChartData.push(0);
+      }
 
-  constructor() {
-    this.getBriefAllRooms();
-    this.getTotalWaterUsageLast30Days();
-    this.getTotalElecUsageLast30Days();
+      var startDate = new Date(
+        new Date(new Date().getTime() - 29 * 24 * 60 * 60 * 1000)
+      );
+      var endDate = new Date();
+
+      for (let i = 1; i <= sensorCount; i++) {
+        var lastUsageData = await lastValueFrom(
+          this.sensorDataService.fetchElecData(
+            `power${i}`,
+            new Date(startDate.getTime() - 24 * 60 * 60 * 1000)
+              .toISOString()
+              .slice(0, 10)
+          )
+        );
+
+        var lastUsage = lastUsageData?.[0]?.power ?? 0;
+
+        var elecData = await lastValueFrom(
+          this.sensorDataService.fetchElecDataRange(
+            `power${i}`,
+            startDate.toISOString().slice(0, 10),
+            endDate.toISOString().slice(0, 10)
+          )
+        );
+
+        if (elecData === undefined) {
+          throw new Error('Unable to fetch data for elecData.');
+        }
+
+        for (let j = 0; j < elecData.length; j++) {
+          let date = elecData[j]?.timestamp?.slice(8, 10);
+          if (date?.slice(0, 1) === '0') date = date.slice(1, 2); // Silly fix
+          if (date !== undefined) {
+            let usage = elecData[j]?.power;
+            if (usage) {
+              elecFetchedUsageData[date] += usage - lastUsage;
+              lastUsage = usage;
+            }
+          }
+        }
+      }
+
+      for (let i = 0; i < 30; i++) {
+        this.elecChartData[i] = elecFetchedUsageData[this.chartLabels[i]];
+      }
+    } catch (error) {
+      console.error('Error while building data for electricity chart: ', error);
+    }
+  }
+
+  private async buildWaterChartData(sensorCount: number) {
+    try {
+      let waterFetchedUsageData: { [date: string]: number } = {};
+      for (let i = -29; i <= 0; i++) {
+        waterFetchedUsageData[this.chartLabels[i + 29]] = 0;
+        this.waterChartData.push(0);
+      }
+
+      var startDate = new Date(
+        new Date(new Date().getTime() - 29 * 24 * 60 * 60 * 1000)
+      );
+      var endDate = new Date();
+
+      for (let i = 1; i <= sensorCount; i++) {
+        var lastUsageData = await lastValueFrom(
+          this.sensorDataService.fetchWaterData(
+            `water${i}`,
+            new Date(startDate.getTime() - 24 * 60 * 60 * 1000)
+              .toISOString()
+              .slice(0, 10)
+          )
+        );
+
+        var lastUsage = lastUsageData?.[0]?.water ?? 0;
+
+        var waterData = await lastValueFrom(
+          this.sensorDataService.fetchWaterDataRange(
+            `water${i}`,
+            startDate.toISOString().slice(0, 10),
+            endDate.toISOString().slice(0, 10)
+          )
+        );
+
+        if (waterData === undefined) {
+          throw new Error('Unable to fetch data for waterData.');
+        }
+
+        for (let j = 0; j < waterData.length; j++) {
+          let date = waterData[j]?.timestamp?.slice(8, 10);
+          if (date?.slice(0, 1) === '0') date = date.slice(1, 2); // Silly fix
+          if (date !== undefined) {
+            let usage = waterData[j]?.water;
+            if (usage) {
+              waterFetchedUsageData[date] += usage - lastUsage;
+              lastUsage = usage;
+            }
+          }
+        }
+      }
+
+      for (let i = 0; i < 30; i++) {
+        this.waterChartData[i] = waterFetchedUsageData[this.chartLabels[i]];
+      }
+    } catch (error) {
+      console.error('Error while building data for water chart: ', error);
+    }
   }
 }

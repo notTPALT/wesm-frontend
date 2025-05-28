@@ -1,30 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ChartConfiguration, ChartData } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
   selector: 'app-water-brief',
+  standalone: true,
   imports: [BaseChartDirective],
   templateUrl: './water-brief.component.html',
   styleUrl: './water-brief.component.css',
 })
-export class WaterBriefComponent {
-  public chartLabels: string[] = [
-    'Mon',
-    'Tue',
-    'Wed',
-    'Thu',
-    'Fri',
-    'Sat',
-    'Sun',
-  ];
+export class WaterBriefComponent implements OnChanges {
+  @Input() chartLabels: string[] = [];
+  @Input() chartData: number[] = [];
+
   // Water chart data
   public waterData: ChartData<'bar'> = {
-    labels: this.chartLabels,
+    labels: [],
     datasets: [
       {
         label: 'Water (m³)',
-        data: [10, 12, 8, 15, 11, 13, 14],
+        data: [],
         backgroundColor: 'rgba(34, 197, 94, 0.6)', // Green
         borderColor: 'rgba(34, 197, 94, 1)',
         borderWidth: 1,
@@ -52,4 +47,24 @@ export class WaterBriefComponent {
       },
     },
   };
+
+  constructor() {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['chartLabels'] || changes['chartData']) {
+      this.waterData = {
+        labels: this.chartLabels || [],
+        datasets: [
+          {
+            label: 'Water (m³)',
+            data: this.chartData || [],
+            backgroundColor: 'rgba(34, 197, 94, 0.6)',
+            borderColor: 'rgba(34, 197, 94, 1)',
+            borderWidth: 1,
+          },
+        ],
+      };
+      console.log('Updated waterData:', this.waterData);
+    }
+  }
 }
