@@ -1,26 +1,96 @@
-<div 
+<div
   class="fixed inset-0 bg-black/25 backdrop-blur-sm flex items-center justify-center z-50"
   (click)="onClose()"
-  >
-  <div 
-  class="bg-white rounded-lg shadow-xl p-6 max-w-md w-full m-4"
-  @fadeSlideInOut
+>
+  <div
+    class="bg-white rounded-lg shadow-xl p-6 max-w-lg w-full m-4"
+    @fadeSlideInOut
     (click)="$event.stopPropagation()"
   >
+    <!-- Header -->
     <div class="flex justify-between items-center mb-4">
-      <h2 class="text-xl font-semibold">Popup Title</h2>
-      <button 
-        class="text-gray-500 hover:text-gray-700"
-        (click)="onClose()"
-      >
+      <h2 class="text-xl font-semibold">Room {{ roomData.roomName }}</h2>
+      <button class="text-gray-500 hover:text-gray-700" (click)="onClose()">
         ✕
       </button>
     </div>
-    <p class="text-gray-600 mb-4">
-      This is a simple popup component with fade and slide animations, styled with Tailwind CSS.
-    </p>
-    <div class="flex justify-end">
-      <button 
+
+    <!-- Room Information -->
+    <div class="grid grid-cols-2 gap-4 mb-6">
+      <!-- Electricity -->
+      <div>
+        <h3 class="text-lg font-medium text-gray-700">Electricity</h3>
+        <p class="text-gray-600">
+          Past Record: {{ roomData.pastElectricity }} kWh
+        </p>
+        <p class="text-gray-600">
+          Current Record: {{ roomData.currentElectricity }} kWh
+        </p>
+        <p class="text-red-500">
+          Unpaid Fee: ${{ roomData.unpaidElectricityFee }}
+        </p>
+      </div>
+      <!-- Water -->
+      <div>
+        <h3 class="text-lg font-medium text-gray-700">Water</h3>
+        <p class="text-gray-600">Past Record: {{ roomData.pastWater }} m³</p>
+        <p class="text-gray-600">
+          Current Record: {{ roomData.currentWater }} m³
+        </p>
+        <p class="text-red-500">Unpaid Fee: ${{ roomData.unpaidWaterFee }}</p>
+      </div>
+    </div>
+
+    <!-- Total Fee -->
+    <div class="mb-6">
+      <p class="text-lg font-semibold text-gray-700">
+        Total Unpaid Fee: ${{ roomData.totalFee }}
+      </p>
+    </div>
+
+    <!-- Charts -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Electricity Chart -->
+      <div>
+        <h3 class="text-lg font-medium text-gray-700 mb-2">
+          Electricity Usage (Past 30 Days)
+        </h3>
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <canvas
+            baseChart
+            [data]="electricityChartData"
+            [options]="chartOptions"
+            type="bar"
+            class="h-48"
+          ></canvas>
+        </div>
+      </div>
+      <!-- Water Chart -->
+      <div>
+        <h3 class="text-lg font-medium text-gray-700 mb-2">
+          Water Usage (Past 30 Days)
+        </h3>
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <canvas
+            baseChart
+            [data]="waterChartData"
+            [options]="chartOptions"
+            type="bar"
+            class="h-48"
+          ></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Close Button -->
+    <div class="flex justify-end mt-6">
+      <button
+        class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mr-5"
+        (click)="onClose()"
+      >
+        Print PDF
+      </button>
+      <button
         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         (click)="onClose()"
       >
