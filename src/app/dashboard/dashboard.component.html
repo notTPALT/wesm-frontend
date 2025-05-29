@@ -7,18 +7,18 @@
         Total electricity used
       </h3>
       <p class="text-3xl font-bold text-blue-600">
-        {{ totalElecUsageLast30Days }} kWh
+        {{ totalElecUsageLast30Days.toFixed(2) }} kWh
       </p>
     </div>
     <div class="bg-white p-6 rounded-lg shadow">
       <h3 class="text-lg font-semibold text-gray-700">Total water used</h3>
       <p class="text-3xl font-bold text-green-600">
-        {{ totalWaterUsageLast30Days }} m³
+        {{ totalWaterUsageLast30Days.toFixed(2) }} m³
       </p>
     </div>
     <div class="bg-white p-6 rounded-lg shadow">
       <h3 class="text-lg font-semibold text-gray-700">Total Payment</h3>
-      <p class="text-3xl font-bold text-purple-600">$789</p>
+      <p class="text-3xl font-bold text-purple-600">${{ (789).toFixed(2) }}</p>
     </div>
   </div>
 
