@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Output, HostBinding, inject } from '@angular/core';
+import { Component, EventEmitter, Output, HostBinding, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { ChartConfiguration, ChartData } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
+import { RoomBriefData } from '../../interfaces/room-brief-data';
 
 @Component({
   selector: 'app-room-details',
@@ -31,49 +32,37 @@ import { BaseChartDirective } from 'ng2-charts';
     ])
   ]
 })
-export class RoomDetailsComponent {
+export class RoomDetailsComponent implements OnChanges {
+  @Input() roomData!: RoomBriefData;
+  @Input() chartLabels!: string[];
+  @Input() elecUsageChartData!: number[];
+  @Input() waterUsageChartData!: number[];
   @Output() close = new EventEmitter<void>();
 
-  // Mock room data (replace with API/service in real app)
-  roomData = {
-    roomName: '102',
-    pastElectricity: 150,
-    currentElectricity: 180,
-    unpaidElectricityFee: 45.50,
-    pastWater: 10,
-    currentWater: 12,
-    unpaidWaterFee: 15.75,
-    totalFee: 61.25
-  };
-
   // Chart data for electricity (past 30 days)
-  electricityChartData: ChartData<'line'> = {
-    labels: Array.from({ length: 30 }, (_, i) => `${i + 1}`),
+  electricityChartData: ChartData<'bar'> = {
+    labels: [],
     datasets: [
       {
-        data: Array.from({ length: 30 }, () => Math.random() * 10 + 5), // Random data for demo
+        data: [],
         label: 'Electricity (kWh)',
         backgroundColor: 'rgba(59, 130, 246, 0.6)',
         borderColor: 'rgba(59, 130, 246, 1)',
         borderWidth: 1,
-        fill: true,
-        tension: 0.4
       }
     ]
   };
 
   // Chart data for water (past 30 days)
-  waterChartData: ChartData<'line'> = {
-    labels: Array.from({ length: 30 }, (_, i) => `${i + 1}`),
+  waterChartData: ChartData<'bar'> = {
+    labels: [],
     datasets: [
       {
-        data: Array.from({ length: 30 }, () => Math.random() * 2 + 1), // Random data for demo
+        data: [],
         label: 'Water (m³)',
         backgroundColor: 'rgba(34, 197, 94, 0.6)',
         borderColor: 'rgba(34, 197, 94, 1)',
         borderWidth: 1,
-        fill: true,
-        tension: 0.4
       }
     ]
   };
@@ -101,5 +90,40 @@ export class RoomDetailsComponent {
 
   onClose() {
     this.close.emit();
+  }
+
+  constructor() {}
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['chartLabels'] || changes['elecUsageChartData']) {
+      this.electricityChartData = {
+        labels: this.chartLabels || [],
+        datasets: [
+          {
+            label: 'Electricity (kWh)',
+            data: this.elecUsageChartData || [],
+            backgroundColor: 'rgba(59, 130, 246, 0.6)',
+            borderColor: 'rgba(59, 130, 246, 1)',
+            borderWidth: 1,
+          },
+        ],
+      };
+      console.log('Updated electricityChartData:', this.electricityChartData);
+    }
+
+    if (changes['chartLabels'] || changes['waterUsageChartData']) {
+      this.waterChartData = {
+        labels: this.chartLabels || [],
+        datasets: [
+          {
+            label: 'Water (m³)',
+            data: this.waterUsageChartData || [],
+            backgroundColor: 'rgba(34, 197, 94, 0.6)',
+            borderColor: 'rgba(34, 197, 94, 1)',
+            borderWidth: 1,
+          },
+        ],
+      };
+      console.log('Updated waterUsageChartData:', this.waterUsageChartData);
+    }
   }
 }

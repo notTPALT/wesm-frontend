@@ -5,12 +5,17 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-room-brief',
+  standalone: true,
   imports: [CommonModule, RoomDetailsComponent],
   templateUrl: './room-brief.component.html',
   styleUrl: './room-brief.component.css'
 })
 export class RoomBriefComponent {
+  @Input() index!: number;
   @Input() roomData!: RoomBriefData;
+  @Input() chartLabels!: string[];
+  @Input() elecFetchedUsage!: number[][];
+  @Input() waterFetchedUsage!: number[][];
   showRoomDetails: boolean = false;
 
   toggleRoomDetails() {

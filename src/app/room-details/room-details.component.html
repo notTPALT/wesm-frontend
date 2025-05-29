@@ -9,7 +9,7 @@
   >
     <!-- Header -->
     <div class="flex justify-between items-center mb-4">
-      <h2 class="text-xl font-semibold">Room {{ roomData.roomName }}</h2>
+      <h2 class="text-xl font-semibold">Room {{ `102` }}</h2>
       <button 
         class="text-gray-500 hover:text-gray-700"
         (click)="onClose()"
@@ -33,23 +33,23 @@
             <tr>
               <td class="px-4 py-2 font-medium text-gray-700">Electricity</td>
               <td class="px-4 py-2">
-                <div>Past: {{ roomData.pastElectricity }} kWh</div>
-                <div>Current: {{ roomData.currentElectricity }} kWh</div>
-                <div class="text-red-500">Unpaid: ${{ roomData.unpaidElectricityFee }}</div>
+                <div>Past: <b>{{ roomData.elecPast }}</b> kWh</div>
+                <div>Current: <b>{{ roomData.elecCurrent }}</b> kWh</div>
+                <div class="text-red-500">Due: ${{ 69 }}</div>
               </td>
             </tr>
             <tr>
               <td class="px-4 py-2 font-medium text-gray-700">Water</td>
               <td class="px-4 py-2">
-                <div>Past: {{ roomData.pastWater }} m³</div>
-                <div>Current: {{ roomData.currentWater }} m³</div>
-                <div class="text-red-500">Unpaid: ${{ roomData.unpaidWaterFee }}</div>
+                <div>Past: <b>{{ roomData.waterPast }}</b> m³</div>
+                <div>Current: <b>{{ roomData.waterCurrent }}</b> m³</div>
+                <div class="text-red-500">Due: ${{ 420 }}</div>
               </td>
             </tr>
             <tr>
-              <td class="px-4 py-2 font-medium text-gray-700">Total</td>
+              <td class="px-4 py-2 font-medium text-gray-700">Total Due: </td>
               <td class="px-4 py-2">
-                <div class="font-semibold text-gray-700">Total Unpaid: ${{ roomData.totalFee }}</div>
+                <div class="font-semibold text-red-500">${{ roomData.unpaidAmount }}</div>
               </td>
             </tr>
           </tbody>
@@ -60,7 +60,7 @@
       <div class="flex flex-col gap-4">
         <!-- Electricity Chart -->
         <div>
-          <h3 class="text-lg font-medium text-gray-700 mb-2">Electricity Usage (Past 30 Days)</h3>
+          <h3 class="text-lg font-medium text-gray-700 mb-2">Electricity Usage (From Last Due)</h3>
           <div class="bg-gray-50 p-4 rounded-lg">
             <canvas
               baseChart
@@ -73,7 +73,7 @@
         </div>
         <!-- Water Chart -->
         <div>
-          <h3 class="text-lg font-medium text-gray-700 mb-2">Water Usage (Past 30 Days)</h3>
+          <h3 class="text-lg font-medium text-gray-700 mb-2">Water Usage (From Last Due)</h3>
           <div class="bg-gray-50 p-4 rounded-lg">
             <canvas
               baseChart

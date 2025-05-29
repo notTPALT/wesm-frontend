@@ -1,12 +1,11 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SensorDataService } from '../../services/sensor-data.service';
-import { last, lastValueFrom } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 import { RoomBriefComponent } from '../room-brief/room-brief.component';
 import { ElectricityBriefComponent } from '../electricity-brief/electricity-brief.component';
 import { WaterBriefComponent } from '../water-brief/water-brief.component';
 import { RoomBriefData } from '../../interfaces/room-brief-data';
-
 @Component({
   imports: [
     CommonModule,
@@ -27,6 +26,8 @@ export class DashboardComponent implements OnInit {
   public chartLabels: string[] = [];
   public elecChartData: number[] = [];
   public waterChartData: number[] = [];
+  public elecFetchedUsage: number[][] = [];
+  public waterFetchedUsage: number[][] = [];
 
   async ngOnInit() {
     await Promise.all([
@@ -206,6 +207,7 @@ export class DashboardComponent implements OnInit {
       var endDate = new Date();
 
       for (let i = 1; i <= sensorCount; i++) {
+        this.elecFetchedUsage.push([]);
         var lastUsageData = await lastValueFrom(
           this.sensorDataService.fetchElecData(
             `power${i}`,
@@ -215,7 +217,10 @@ export class DashboardComponent implements OnInit {
           )
         );
 
-        var lastUsage = lastUsageData?.[0]?.power ?? 0;
+        var lastUsage = 0;
+        if (lastUsageData) {
+          lastUsage = lastUsageData[0]?.power ?? 0;
+        }
 
         var elecData = await lastValueFrom(
           this.sensorDataService.fetchElecDataRange(
@@ -235,6 +240,7 @@ export class DashboardComponent implements OnInit {
           if (date !== undefined) {
             let usage = elecData[j]?.power;
             if (usage) {
+              this.elecFetchedUsage[i - 1].push(usage - lastUsage);
               elecFetchedUsageData[date] += usage - lastUsage;
               lastUsage = usage;
             }
@@ -264,6 +270,7 @@ export class DashboardComponent implements OnInit {
       var endDate = new Date();
 
       for (let i = 1; i <= sensorCount; i++) {
+        this.waterFetchedUsage.push([]);
         var lastUsageData = await lastValueFrom(
           this.sensorDataService.fetchWaterData(
             `water${i}`,
@@ -293,6 +300,7 @@ export class DashboardComponent implements OnInit {
           if (date !== undefined) {
             let usage = waterData[j]?.water;
             if (usage) {
+              this.waterFetchedUsage[i - 1].push(usage - lastUsage);
               waterFetchedUsageData[date] += usage - lastUsage;
               lastUsage = usage;
             }

@@ -30,8 +30,12 @@
       <div class="inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <!-- Room 1 -->
         <app-room-brief
-          *ngFor="let roomBriefData of roomsBriefData"
+          *ngFor="let roomBriefData of roomsBriefData; let i = index"
+          [index]="i"
           [roomData]="roomBriefData"
+          [chartLabels]="chartLabels"
+          [elecFetchedUsage]="elecFetchedUsage"
+          [waterFetchedUsage]="waterFetchedUsage"
         ></app-room-brief>
       </div>
     </div>
