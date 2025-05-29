@@ -35,7 +35,7 @@ export class DashboardComponent implements OnInit {
       this.getTotalElecUsageLast30Days(),
       this.buildChartLabels(),
       this.buildElecChartData(2),
-      this.buildWaterChartData(2)
+      this.buildWaterChartData(2),
     ]);
     this.chartLabels = [...this.chartLabels];
     this.elecChartData = [...this.elecChartData];
@@ -191,7 +191,7 @@ export class DashboardComponent implements OnInit {
       );
     }
   }
-  
+
   private async buildElecChartData(sensorCount: number) {
     try {
       let elecFetchedUsageData: { [date: string]: number } = {};

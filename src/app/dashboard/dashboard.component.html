@@ -6,11 +6,15 @@
       <h3 class="text-lg font-semibold text-gray-700">
         Total electricity used
       </h3>
-      <p class="text-3xl font-bold text-blue-600">{{ totalElecUsageLast30Days }} kWh</p>
+      <p class="text-3xl font-bold text-blue-600">
+        {{ totalElecUsageLast30Days }} kWh
+      </p>
     </div>
     <div class="bg-white p-6 rounded-lg shadow">
       <h3 class="text-lg font-semibold text-gray-700">Total water used</h3>
-      <p class="text-3xl font-bold text-green-600">{{ totalWaterUsageLast30Days }} m³</p>
+      <p class="text-3xl font-bold text-green-600">
+        {{ totalWaterUsageLast30Days }} m³
+      </p>
     </div>
     <div class="bg-white p-6 rounded-lg shadow">
       <h3 class="text-lg font-semibold text-gray-700">Total Payment</h3>
@@ -37,9 +41,16 @@
       <h3 class="text-lg font-semibold text-gray-700 mb-4">Usage Overview</h3>
       <div class="grid grid-cols-1 gap-6">
         <!-- Electricity Usage Chart -->
-        <app-electricity-brief [chartLabels]="chartLabels" [chartData]="elecChartData"></app-electricity-brief>
+        <app-electricity-brief
+          [chartLabels]="chartLabels"
+          [chartData]="elecChartData"
+        ></app-electricity-brief>
         <!-- Water Usage Chart -->
-        <app-water-brief [chartLabels]="chartLabels" [chartData]="waterChartData"> </app-water-brief>
+        <app-water-brief
+          [chartLabels]="chartLabels"
+          [chartData]="waterChartData"
+        >
+        </app-water-brief>
       </div>
     </div>
   </div>

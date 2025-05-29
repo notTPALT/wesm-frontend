@@ -4,10 +4,10 @@ import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
   selector: 'app-electricity-brief',
-  standalone: true, // Add this if using standalone components
+  standalone: true,
   imports: [BaseChartDirective],
   templateUrl: './electricity-brief.component.html',
-  styleUrls: ['./electricity-brief.component.css']
+  styleUrls: ['./electricity-brief.component.css'],
 })
 export class ElectricityBriefComponent implements OnChanges {
   @Input() chartLabels: string[] = [];
