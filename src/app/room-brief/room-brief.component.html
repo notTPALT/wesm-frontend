@@ -14,18 +14,20 @@
   </div>
   <div class="space-y-2">
     <div>
-      <p class="text-sm font-medium text-gray-700">Electricity</p>
-      <p class="text-sm text-gray-600">Past: <b>{{ roomData.elecPast }}</b> kWh</p>
+      <p class="text-sm font-medium text-gray-700">Electricity usage:</p>
+      <p class="text-sm text-gray-600">{{ ((roomData.elecCurrent ?? 0)  - (roomData.elecPast ?? 0)).toFixed(0) }} kWh</p>
+      <!-- <p class="text-sm text-gray-600">Past: <b>{{ roomData.elecPast }}</b> kWh</p>
       <p class="text-sm text-gray-600">
         Current: <b>{{ roomData.elecCurrent }}</b> kWh
-      </p>
+      </p> -->
     </div>
     <div>
-      <p class="text-sm font-medium text-gray-700">Water</p>
-      <p class="text-sm text-gray-600">Past: <b>{{ roomData.waterPast }}</b> m³</p>
+      <p class="text-sm font-medium text-gray-700">Water usage:</p>
+      <p class="text-sm text-gray-600">{{ ((roomData.waterCurrent ?? 0)  - (roomData.waterPast ?? 0)).toFixed(0) }} m³</p>
+      <!-- <p class="text-sm text-gray-600">Past: <b>{{ roomData.waterPast }}</b> m³</p>
       <p class="text-sm text-gray-600">
-        Current: <b>{{ roomData.waterCurrent }}</b> m³
-      </p>
+        Current: <b>{{ roomData.waterCurrent }}</b> m³ -->
+      <!-- </p> -->
     </div>
     <p class="text-sm text-red-500">
       Total Due: {{ roomData.totalDue }} VND

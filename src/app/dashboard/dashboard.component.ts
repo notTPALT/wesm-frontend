@@ -21,6 +21,7 @@ export class DashboardComponent implements OnInit {
   private sensorDataService: SensorDataService = inject(SensorDataService);
   private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
   public roomsBriefData: RoomBriefData[] = [];
+  public filteredRoomsBriefData: RoomBriefData[] = [];
   public totalWaterUsageLast30Days: number = -1;
   public totalElecUsageLast30Days: number = -1;
   public chartLabels: string[] = [];
@@ -35,13 +36,24 @@ export class DashboardComponent implements OnInit {
       this.getTotalWaterUsageLast30Days(),
       this.getTotalElecUsageLast30Days(),
       this.buildChartLabels(),
-      this.buildElecChartData(2),
-      this.buildWaterChartData(2),
+      this.buildElecChartData(6),
+      this.buildWaterChartData(6),
     ]);
+    this.filteredRoomsBriefData = this.roomsBriefData;
     this.chartLabels = [...this.chartLabels];
     this.elecChartData = [...this.elecChartData];
     this.waterChartData = [...this.waterChartData];
     this.cdr.detectChanges();
+  }
+
+  filterRooms(roomName: string) {
+    if (!roomName) {
+      this.filteredRoomsBriefData = this.roomsBriefData;
+      return;
+    }
+    this.filteredRoomsBriefData = this.roomsBriefData.filter((single) =>
+      single?.roomName?.toLowerCase().includes(roomName.toLowerCase()),
+    );
   }
 
   // The following functions assume that the sensors only send data to database once a day.
@@ -113,7 +125,7 @@ export class DashboardComponent implements OnInit {
 
     // Placeholder
     roomBrief.roomName = `10${index}`;
-    roomBrief.status = (index === 1 ? true : false);
+    roomBrief.status = ((index % 2) ? true : false);
 
     return roomBrief;
   }
@@ -121,7 +133,7 @@ export class DashboardComponent implements OnInit {
   // Currently there are only 2 rooms available, so it will be hardcoded.
   // Should use something like $ROOMS env variable instead.
   private async getBriefAllRooms() {
-    for (let i = 1; i <= 2; i++) {
+    for (let i = 1; i <= 6; i++) {
       let roomBrief: RoomBriefData = await this.getRoomBrief(i);
       this.roomsBriefData.push(roomBrief);
     }
@@ -131,7 +143,7 @@ export class DashboardComponent implements OnInit {
     var latest: number = 0;
 
     try {
-      for (let i = 1; i <= 2; i++) {
+      for (let i = 1; i <= 6; i++) {
         let a = await lastValueFrom(
           this.sensorDataService.fetchWaterData(`water${i}`)
         );
@@ -162,7 +174,7 @@ export class DashboardComponent implements OnInit {
     var latest: number = 0;
 
     try {
-      for (let i = 1; i <= 2; i++) {
+      for (let i = 1; i <= 6; i++) {
         let a = await lastValueFrom(
           this.sensorDataService.fetchElecData(`power${i}`)
         );
