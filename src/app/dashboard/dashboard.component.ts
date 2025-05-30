@@ -125,7 +125,6 @@ export class DashboardComponent implements OnInit {
 
     // Placeholder
     roomBrief.roomName = `10${index}`;
-    roomBrief.status = ((index % 2) ? true : false);
 
     return roomBrief;
   }
