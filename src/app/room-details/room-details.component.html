@@ -12,13 +12,16 @@
     <div class="flex justify-between items-center mb-4">
       <div class="flex items-center">
         <h2 class="text-xl font-semibold">Room {{ roomData.roomName }}</h2>
-        <div
-          class="w-3 h-3 rounded-full ml-2"
-          [ngClass]="{
-            'bg-blue-500': roomData.status === true,
-            'bg-red-500': roomData.status === false
-          }"
-        ></div>
+        <div class="flex items-center rounded-lg bg-gray-200 ml-2 px-2">
+          <div
+            class="w-3 h-3 rounded-full"
+            [ngClass]="{
+              'bg-green-500': roomData.status === true,
+              'bg-red-500': roomData.status === false
+            }"
+          ></div>
+          <span class="text-sm text-gray-900 ml-2">{{ roomData.status ? 'active' : 'inactive' }}</span>
+        </div>
       </div>
       <button class="text-gray-500 hover:text-gray-700" (click)="onClose()">
         ✕
@@ -31,7 +34,7 @@
       <div>
         <table class="w-full border border-gray-200 rounded-lg bg-grey-200">
           <thead>
-            <tr class="bg-gray-100">
+            <tr class="bg-gray-200">
               <th class="px-4 py-2 text-left text-gray-700 font-medium">
                 Utility
               </th>
@@ -54,7 +57,7 @@
                 <b>{{ roomData.elecCurrent }}</b> kWh
               </td>
               <td class="px-4 py-2 text-red-500">
-                {{ elecPrice.toFixed(0) }} VND
+                {{ roomData.elecDue }} VND
               </td>
             </tr>
             <tr>
@@ -66,17 +69,18 @@
                 <b>{{ roomData.waterCurrent }}</b> m³
               </td>
               <td class="px-4 py-2 text-red-500">
-                {{ waterPrice.toFixed(0) }} VND
+                {{ roomData.waterDue }} VND
               </td>
             </tr>
           </tbody>
-          <tfoot class="divide-y divide-gray-200">
+          <tfoot class="bg-gray-100 shadow-md">
             <tr>
-              <td colspan="3" class="px-4 py-2 font-semibold text-gray-700">
+              <td colspan="2"></td>
+              <td class="px-4 py-3 font-bold text-lg">
                 Total Due:
               </td>
-              <td class="px-4 py-2 font-semibold text-red-500">
-                {{ (elecPrice + waterPrice).toFixed(0) }} VND
+              <td class="px-4 py-3 font-bold text-lg text-red-500">
+                {{ roomData.totalDue }} VND
               </td>
             </tr>
           </tfoot>

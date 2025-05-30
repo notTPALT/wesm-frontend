@@ -21,4 +21,6 @@ export class RoomBriefComponent {
   toggleRoomDetails() {
     this.showRoomDetails = !this.showRoomDetails;
   }
+  constructor() {
+  }
 }

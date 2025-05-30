@@ -101,7 +101,9 @@ export class DashboardComponent implements OnInit {
       roomBrief.elecCurrent = await this.getElecUsage(index);
       roomBrief.waterPast = await this.getWaterUsage(index, pastDate);
       roomBrief.waterCurrent = await this.getWaterUsage(index);
-      roomBrief.unpaidAmount = Math.floor(Math.random() * 1000);
+      roomBrief.elecDue = Math.round((roomBrief?.elecCurrent - roomBrief?.elecPast) * 3500) ?? 0;
+      roomBrief.waterDue = Math.round((roomBrief?.waterCurrent - roomBrief?.waterPast) * 15000) ?? 0;
+      roomBrief.totalDue = roomBrief.elecDue + roomBrief.waterDue;
     } catch (error) {
       console.error(
         `Unable to get completed data for room ${index}. Error: `,
@@ -111,7 +113,7 @@ export class DashboardComponent implements OnInit {
 
     // Placeholder
     roomBrief.roomName = `10${index}`;
-    roomBrief.status = false;
+    roomBrief.status = (index === 1 ? true : false);
 
     return roomBrief;
   }

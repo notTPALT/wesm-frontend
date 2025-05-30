@@ -66,8 +66,6 @@ export class RoomDetailsComponent implements OnChanges {
   @Output() close = new EventEmitter<void>();
 
   @ViewChildren(BaseChartDirective) charts!: QueryList<BaseChartDirective>;
-  elecPrice: number = 0;
-  waterPrice: number = 0;
   pdfCharts: BaseChartDirective[] = [];
 
   // Chart data for electricity (past 30 days)
@@ -179,7 +177,7 @@ export class RoomDetailsComponent implements OnChanges {
           '',
           '',
           {
-            content: `Total Unpaid: $${this.roomData.unpaidAmount}`,
+            content: `Total Due: $${(this.roomData.totalDue ?? 0).toFixed(0)}`,
             styles: { fontStyle: 'bold' },
           },
         ],
@@ -250,10 +248,6 @@ export class RoomDetailsComponent implements OnChanges {
   }
   
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['roomData']) {
-      this.elecPrice = (((this.roomData.elecCurrent ?? 0) - (this.roomData.elecPast ?? 0)) * 3500);
-      this.waterPrice = (((this.roomData.waterCurrent ?? 0) - (this.roomData.waterPast ?? 0)) * 15000);
-    }
     if (changes['chartLabels'] || changes['elecUsageChartData']) {
       this.electricityChartData = {
         labels: this.chartLabels || [],
