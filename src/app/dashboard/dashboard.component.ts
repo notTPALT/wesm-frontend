@@ -101,13 +101,17 @@ export class DashboardComponent implements OnInit {
       roomBrief.elecCurrent = await this.getElecUsage(index);
       roomBrief.waterPast = await this.getWaterUsage(index, pastDate);
       roomBrief.waterCurrent = await this.getWaterUsage(index);
-      roomBrief.unpaidAmount = Math.floor(Math.random() * 1000); // Idk the formula, feel free to modify this
+      roomBrief.unpaidAmount = Math.floor(Math.random() * 1000);
     } catch (error) {
       console.error(
         `Unable to get completed data for room ${index}. Error: `,
         error
       );
     }
+
+    // Placeholder
+    roomBrief.roomName = `10${index}`;
+    roomBrief.status = false;
 
     return roomBrief;
   }

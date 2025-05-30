@@ -66,6 +66,8 @@ export class RoomDetailsComponent implements OnChanges {
   @Output() close = new EventEmitter<void>();
 
   @ViewChildren(BaseChartDirective) charts!: QueryList<BaseChartDirective>;
+  elecPrice: number = 0;
+  waterPrice: number = 0;
   pdfCharts: BaseChartDirective[] = [];
 
   // Chart data for electricity (past 30 days)
@@ -153,7 +155,7 @@ export class RoomDetailsComponent implements OnChanges {
     // Add title
     pdf.setFontSize(16);
     pdf.setFont('helvetica', 'bold');
-    pdf.text(`Room ${102} Details`, margin, margin + 5);
+    pdf.text(`Room ${ this.roomData.roomName } Details`, margin, margin + 5);
 
     // Add room data table using autoTable
     autoTable(pdf, {
@@ -231,22 +233,27 @@ export class RoomDetailsComponent implements OnChanges {
       pageHeight - margin
     );
 
-    pdf.save(`Room_${102}_Details.pdf`);
+    pdf.save(`Room_${this.roomData.roomName}_Details.pdf`);
   }
 
   onClose() {
     this.close.emit();
   }
 
-  constructor() {}
-
+  constructor() {
+  }
+  
   ngAfterViewInit() {
     this.charts.forEach((chart) => {
       this.pdfCharts.push(chart);
     });
   }
-
+  
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes['roomData']) {
+      this.elecPrice = (((this.roomData.elecCurrent ?? 0) - (this.roomData.elecPast ?? 0)) * 3500);
+      this.waterPrice = (((this.roomData.waterCurrent ?? 0) - (this.roomData.waterPast ?? 0)) * 15000);
+    }
     if (changes['chartLabels'] || changes['elecUsageChartData']) {
       this.electricityChartData = {
         labels: this.chartLabels || [],
