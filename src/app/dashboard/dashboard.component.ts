@@ -115,7 +115,7 @@ export class DashboardComponent implements OnInit {
       roomBrief.waterCurrent = Math.floor(await this.getWaterUsage(index));
       roomBrief.elecDue = ((roomBrief.elecCurrent ?? 0) - (roomBrief.elecPast ?? 0)) * 3500;
       roomBrief.waterDue = ((roomBrief.waterCurrent ?? 0) - (roomBrief.waterPast ?? 0)) * 15000;
-      roomBrief.totalDue = roomBrief.elecDue + roomBrief.waterDue;
+      roomBrief.totalDue = roomBrief.totalDue || roomBrief.elecDue + roomBrief.waterDue;
     } catch (error) {
       console.error(
         `Unable to get completed data for room ${index}. Error: `,
