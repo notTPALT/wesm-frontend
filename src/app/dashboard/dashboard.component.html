@@ -4,21 +4,21 @@
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
     <div class="bg-white p-6 rounded-lg shadow">
       <h3 class="text-lg font-semibold text-gray-700">
-        Total electricity used
+        Total Electricity Used:
       </h3>
       <p class="text-3xl font-bold text-blue-600">
         {{ totalElecUsageLast30Days }} kWh
       </p>
     </div>
     <div class="bg-white p-6 rounded-lg shadow">
-      <h3 class="text-lg font-semibold text-gray-700">Total water used</h3>
+      <h3 class="text-lg font-semibold text-gray-700">Total Water Used:</h3>
       <p class="text-3xl font-bold text-green-600">
         {{ totalWaterUsageLast30Days }} m³
       </p>
     </div>
     <div class="bg-white p-6 rounded-lg shadow">
-      <h3 class="text-lg font-semibold text-gray-700">Total Payment</h3>
-      <p class="text-3xl font-bold text-purple-600">${{ (789) }}</p>
+      <h3 class="text-lg font-semibold text-gray-700">Total Due:</h3>
+      <p class="text-3xl font-bold text-purple-600">{{ (totalElecUsageLast30Days * 3500 + totalWaterUsageLast30Days * 15000) }} VND</p>
     </div>
   </div>
 
