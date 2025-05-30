@@ -153,7 +153,7 @@ export class RoomDetailsComponent implements OnChanges {
     // Add title
     pdf.setFontSize(16);
     pdf.setFont('helvetica', 'bold');
-    pdf.text(`Room ${ this.roomData.roomName } Details`, margin, margin + 5);
+    pdf.text(`Room ${this.roomData.roomName} Details`, margin, margin + 5);
 
     // Add room data table using autoTable
     autoTable(pdf, {
@@ -164,15 +164,25 @@ export class RoomDetailsComponent implements OnChanges {
           'Electricity',
           `${this.roomData.elecPast} kWh`,
           `${this.roomData.elecCurrent} kWh`,
-          `${(this.roomData.elecCurrent ?? 0) - (this.roomData.elecPast ?? 0)} kWh`,
-          { content: `${this.roomData.elecDue} VND`, styles: { textColor: [220, 38, 38] } },
+          `${
+            (this.roomData.elecCurrent ?? 0) - (this.roomData.elecPast ?? 0)
+          } kWh`,
+          {
+            content: `${this.roomData.elecDue} VND`,
+            styles: { textColor: [220, 38, 38] },
+          },
         ],
         [
           'Water',
           `${this.roomData.waterPast} m³`,
           `${this.roomData.waterCurrent} m³`,
-          `${(this.roomData.waterCurrent ?? 0) - (this.roomData.waterPast ?? 0)} m³`,
-          { content: `${this.roomData.waterDue} VND`, styles: { textColor: [220, 38, 38] } },
+          `${
+            (this.roomData.waterCurrent ?? 0) - (this.roomData.waterPast ?? 0)
+          } m³`,
+          {
+            content: `${this.roomData.waterDue} VND`,
+            styles: { textColor: [220, 38, 38] },
+          },
         ],
         [
           '',
@@ -180,11 +190,11 @@ export class RoomDetailsComponent implements OnChanges {
           '',
           {
             content: 'Total Due: ',
-            styles: {fontStyle: 'bold'},
+            styles: { fontStyle: 'bold' },
           },
           {
             content: `${this.roomData.totalDue ?? 0} VND`,
-            styles: { fontStyle: 'bold' },
+            styles: { textColor: [220, 38, 38], fontStyle: 'bold' },
           },
         ],
       ],
@@ -244,15 +254,14 @@ export class RoomDetailsComponent implements OnChanges {
     this.close.emit();
   }
 
-  constructor() {
-  }
-  
+  constructor() {}
+
   ngAfterViewInit() {
     this.charts.forEach((chart) => {
       this.pdfCharts.push(chart);
     });
   }
-  
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['chartLabels'] || changes['elecUsageChartData']) {
       this.electricityChartData = {

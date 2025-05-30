@@ -52,7 +52,7 @@ export class DashboardComponent implements OnInit {
       return;
     }
     this.filteredRoomsBriefData = this.roomsBriefData.filter((single) =>
-      single?.roomName?.toLowerCase().includes(roomName.toLowerCase()),
+      single?.roomName?.toLowerCase().includes(roomName.toLowerCase())
     );
   }
 
@@ -111,11 +111,16 @@ export class DashboardComponent implements OnInit {
 
       roomBrief.elecPast = Math.floor(await this.getElecUsage(index, pastDate));
       roomBrief.elecCurrent = Math.floor(await this.getElecUsage(index));
-      roomBrief.waterPast = Math.floor(await this.getWaterUsage(index, pastDate));
+      roomBrief.waterPast = Math.floor(
+        await this.getWaterUsage(index, pastDate)
+      );
       roomBrief.waterCurrent = Math.floor(await this.getWaterUsage(index));
-      roomBrief.elecDue = ((roomBrief.elecCurrent ?? 0) - (roomBrief.elecPast ?? 0)) * 3500;
-      roomBrief.waterDue = ((roomBrief.waterCurrent ?? 0) - (roomBrief.waterPast ?? 0)) * 15000;
-      roomBrief.totalDue = roomBrief.totalDue || roomBrief.elecDue + roomBrief.waterDue;
+      roomBrief.elecDue =
+        ((roomBrief.elecCurrent ?? 0) - (roomBrief.elecPast ?? 0)) * 3500;
+      roomBrief.waterDue =
+        ((roomBrief.waterCurrent ?? 0) - (roomBrief.waterPast ?? 0)) * 15000;
+      roomBrief.totalDue =
+        roomBrief.totalDue || roomBrief.elecDue + roomBrief.waterDue;
     } catch (error) {
       console.error(
         `Unable to get completed data for room ${index}. Error: `,

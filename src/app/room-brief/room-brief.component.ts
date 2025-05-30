@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { RoomBriefData } from '../../interfaces/room-brief-data';
-import { RoomDetailsComponent } from "../room-details/room-details.component";
+import { RoomDetailsComponent } from '../room-details/room-details.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule, RoomDetailsComponent],
   templateUrl: './room-brief.component.html',
-  styleUrl: './room-brief.component.css'
+  styleUrl: './room-brief.component.css',
 })
 export class RoomBriefComponent {
   @Input() index!: number;
@@ -21,6 +21,5 @@ export class RoomBriefComponent {
   toggleRoomDetails() {
     this.showRoomDetails = !this.showRoomDetails;
   }
-  constructor() {
-  }
+  constructor() {}
 }
