@@ -64,6 +64,7 @@ export class RoomDetailsComponent implements OnChanges {
   @Input() elecUsageChartData!: number[];
   @Input() waterUsageChartData!: number[];
   @Output() close = new EventEmitter<void>();
+  math: Math = Math;
 
   @ViewChildren(BaseChartDirective) charts!: QueryList<BaseChartDirective>;
   pdfCharts: BaseChartDirective[] = [];

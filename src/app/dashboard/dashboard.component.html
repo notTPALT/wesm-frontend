@@ -7,18 +7,18 @@
         Total electricity used
       </h3>
       <p class="text-3xl font-bold text-blue-600">
-        {{ totalElecUsageLast30Days.toFixed(2) }} kWh
+        {{ totalElecUsageLast30Days }} kWh
       </p>
     </div>
     <div class="bg-white p-6 rounded-lg shadow">
       <h3 class="text-lg font-semibold text-gray-700">Total water used</h3>
       <p class="text-3xl font-bold text-green-600">
-        {{ totalWaterUsageLast30Days.toFixed(2) }} m³
+        {{ totalWaterUsageLast30Days }} m³
       </p>
     </div>
     <div class="bg-white p-6 rounded-lg shadow">
       <h3 class="text-lg font-semibold text-gray-700">Total Payment</h3>
-      <p class="text-3xl font-bold text-purple-600">${{ (789).toFixed(2) }}</p>
+      <p class="text-3xl font-bold text-purple-600">${{ (789) }}</p>
     </div>
   </div>
 
@@ -36,7 +36,7 @@
         />
         <button class="w-20 py-2 border border-gray-300 rounded-lg bg-blue-500 ml-2 text-white" type="button" (click)="filterRooms(filter.value)">Search</button>
       </div>
-      <div class="inline-grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div class="inline-grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
         <!-- Room 1 -->
         <app-room-brief
           *ngFor="let roomBriefData of filteredRoomsBriefData; let i = index"

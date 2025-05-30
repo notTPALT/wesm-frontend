@@ -44,6 +44,9 @@
               <th class="px-4 py-2 text-left text-gray-700 font-medium">
                 Current
               </th>
+              <th class="px-4 py-2 text-left text-gray-700 font-medium">
+                Usage
+              </th>
               <th class="px-4 py-2 text-left text-gray-700 font-medium">Due</th>
             </tr>
           </thead>
@@ -51,10 +54,13 @@
             <tr>
               <td class="px-4 py-2 font-medium text-gray-700">Electricity</td>
               <td class="px-4 py-2">
-                <b>{{ roomData.elecPast }}</b> kWh
+                <b>{{ roomData.elecPast ?? 0 }}</b> kWh
               </td>
               <td class="px-4 py-2">
-                <b>{{ roomData.elecCurrent }}</b> kWh
+                <b>{{ roomData.elecCurrent ?? 0 }}</b> kWh
+              </td>
+              <td class="px-4 py-2">
+                <b>{{ (roomData.elecCurrent ?? 0) - (roomData.elecPast ?? 0) }}</b> kWh
               </td>
               <td class="px-4 py-2 text-red-500">
                 {{ roomData.elecDue }} VND
@@ -63,10 +69,13 @@
             <tr>
               <td class="px-4 py-2 font-medium text-gray-700">Water</td>
               <td class="px-4 py-2">
-                <b>{{ roomData.waterPast }}</b> m³
+                <b>{{ roomData.waterPast ?? 0 }}</b> m³
               </td>
               <td class="px-4 py-2">
-                <b>{{ roomData.waterCurrent }}</b> m³
+                <b>{{ roomData.waterCurrent ?? 0 }}</b> m³
+              </td>
+              <td class="px-4 py-2">
+                <b>{{ (roomData.waterCurrent ?? 0) - (roomData.waterPast ?? 0) }}</b> kWh
               </td>
               <td class="px-4 py-2 text-red-500">
                 {{ roomData.waterDue }} VND

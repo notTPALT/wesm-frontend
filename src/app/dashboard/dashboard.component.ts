@@ -109,12 +109,12 @@ export class DashboardComponent implements OnInit {
     try {
       roomBrief = roomBrief || {};
 
-      roomBrief.elecPast = await this.getElecUsage(index, pastDate);
-      roomBrief.elecCurrent = await this.getElecUsage(index);
-      roomBrief.waterPast = await this.getWaterUsage(index, pastDate);
-      roomBrief.waterCurrent = await this.getWaterUsage(index);
-      roomBrief.elecDue = Math.round((roomBrief?.elecCurrent - roomBrief?.elecPast) * 3500) ?? 0;
-      roomBrief.waterDue = Math.round((roomBrief?.waterCurrent - roomBrief?.waterPast) * 15000) ?? 0;
+      roomBrief.elecPast = Math.floor(await this.getElecUsage(index, pastDate));
+      roomBrief.elecCurrent = Math.floor(await this.getElecUsage(index));
+      roomBrief.waterPast = Math.floor(await this.getWaterUsage(index, pastDate));
+      roomBrief.waterCurrent = Math.floor(await this.getWaterUsage(index));
+      roomBrief.elecDue = ((roomBrief.elecCurrent ?? 0) - (roomBrief.elecPast ?? 0)) * 3500;
+      roomBrief.waterDue = ((roomBrief.waterCurrent ?? 0) - (roomBrief.waterPast ?? 0)) * 15000;
       roomBrief.totalDue = roomBrief.elecDue + roomBrief.waterDue;
     } catch (error) {
       console.error(
@@ -167,7 +167,7 @@ export class DashboardComponent implements OnInit {
       console.error('Error while fetching total water usage: ', error);
     }
 
-    this.totalWaterUsageLast30Days = latest;
+    this.totalWaterUsageLast30Days = Math.floor(latest);
   }
 
   private async getTotalElecUsageLast30Days() {
@@ -198,7 +198,7 @@ export class DashboardComponent implements OnInit {
       console.error('Error while fetching total electricity usage: ', error);
     }
 
-    this.totalElecUsageLast30Days = latest;
+    this.totalElecUsageLast30Days = Math.floor(latest);
   }
 
   private async buildChartLabels() {
