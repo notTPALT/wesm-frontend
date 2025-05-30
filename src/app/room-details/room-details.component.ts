@@ -158,26 +158,32 @@ export class RoomDetailsComponent implements OnChanges {
     // Add room data table using autoTable
     autoTable(pdf, {
       startY: yPosition,
-      head: [['Utility', 'Past', 'Current', 'Unpaid']],
+      head: [['Utility', 'Past', 'Current', 'Usage', 'Due']],
       body: [
         [
           'Electricity',
           `${this.roomData.elecPast} kWh`,
           `${this.roomData.elecCurrent} kWh`,
-          { content: `$${69}`, styles: { textColor: [220, 38, 38] } },
+          `${(this.roomData.elecCurrent ?? 0) - (this.roomData.elecPast ?? 0)} kWh`,
+          { content: `${this.roomData.elecDue} VND`, styles: { textColor: [220, 38, 38] } },
         ],
         [
           'Water',
           `${this.roomData.waterPast} m³`,
           `${this.roomData.waterCurrent} m³`,
-          { content: `$${420}`, styles: { textColor: [220, 38, 38] } },
+          `${(this.roomData.waterCurrent ?? 0) - (this.roomData.waterPast ?? 0)} m³`,
+          { content: `${this.roomData.waterDue} VND`, styles: { textColor: [220, 38, 38] } },
         ],
         [
-          'Total',
+          '',
           '',
           '',
           {
-            content: `Total Due: $${(this.roomData.totalDue ?? 0).toFixed(0)}`,
+            content: 'Total Due: ',
+            styles: {fontStyle: 'bold'},
+          },
+          {
+            content: `${this.roomData.totalDue ?? 0} VND`,
             styles: { fontStyle: 'bold' },
           },
         ],
