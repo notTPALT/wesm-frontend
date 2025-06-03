@@ -69,7 +69,7 @@
                 <b>{{
                   (roomData.waterCurrent ?? 0) - (roomData.waterPast ?? 0)
                 }}</b>
-                kWh
+                m³
               </td>
               <td class="px-4 py-2 text-red-500">
                 {{ roomData.waterDue }} VND
@@ -128,13 +128,13 @@
     <!-- Buttons -->
     <div class="flex justify-end mt-6">
       <button
-        class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mr-2"
+        class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mr-2 hover:cursor-pointer"
         (click)="printPDF()"
       >
         Print PDF
       </button>
       <button
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded hover:cursor-pointer"
         (click)="onClose()"
       >
         Close

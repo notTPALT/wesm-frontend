@@ -1,4 +1,11 @@
-import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  ChangeDetectorRef,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SensorDataService } from '../../services/sensor-data.service';
 import { lastValueFrom } from 'rxjs';
@@ -29,8 +36,8 @@ export class DashboardComponent implements OnInit {
   public waterChartData: number[] = [];
   public elecFetchedUsage: number[][] = [];
   public waterFetchedUsage: number[][] = [];
-  public elecSensorStatus: boolean = false;
-  public waterSensorStatus: boolean = true;
+  public elecRssi: number = -200;
+  public waterRssi: number = -200;
 
   async ngOnInit() {
     await Promise.all([
@@ -40,6 +47,8 @@ export class DashboardComponent implements OnInit {
       this.buildChartLabels(),
       this.buildElecChartData(6),
       this.buildWaterChartData(6),
+      this.getSensorRssi('water'),
+      this.getSensorRssi('elec'),
     ]);
     this.filteredRoomsBriefData = this.roomsBriefData;
     this.chartLabels = [...this.chartLabels];
@@ -123,7 +132,7 @@ export class DashboardComponent implements OnInit {
         ((roomBrief.waterCurrent ?? 0) - (roomBrief.waterPast ?? 0)) * 15000;
       roomBrief.totalDue =
         roomBrief.totalDue || roomBrief.elecDue + roomBrief.waterDue;
-      roomBrief.paymentStatus = (index % 2 === 0) ? false : true;
+      roomBrief.paymentStatus = index % 2 === 0 ? false : true;
     } catch (error) {
       console.error(
         `Unable to get completed data for room ${index}. Error: `,
@@ -137,7 +146,7 @@ export class DashboardComponent implements OnInit {
     return roomBrief;
   }
 
-  // Currently there are only 2 rooms available, so it will be hardcoded.
+  // Currently there are only 6 rooms available, so it will be hardcoded.
   // Should use something like $ROOMS env variable instead.
   private async getBriefAllRooms() {
     for (let i = 1; i <= 6; i++) {
@@ -338,6 +347,37 @@ export class DashboardComponent implements OnInit {
       }
     } catch (error) {
       console.error('Error while building data for water chart: ', error);
+    }
+  }
+
+  private async getSensorRssi(type: string) {
+    var rssi: number | undefined = undefined;
+    try {
+      if (type === 'water') {
+        rssi = await lastValueFrom(
+          this.sensorDataService.fetchSensorStatus('water')
+        );
+        if (rssi !== undefined) {
+          this.waterRssi = rssi;
+          console.log('Water Rssi: ', rssi);
+        } else {
+          console.error('what');
+        }
+      } else if (type === 'elec') {
+        rssi = await lastValueFrom(
+          this.sensorDataService.fetchSensorStatus('elec')
+        );
+        if (rssi !== undefined) {
+          this.elecRssi = rssi;
+          console.log('Elec Rssi: ', rssi);
+        } else {
+          console.error('what');
+        }
+      } else {
+        console.error('what');
+      }
+    } catch (error) {
+      console.error('what2', error);
     }
   }
 }

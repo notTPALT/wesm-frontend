@@ -21,6 +21,9 @@ export class RoomBriefComponent implements OnChanges {
   toggleRoomDetails() {
     this.showRoomDetails = !this.showRoomDetails;
   }
+  changePaymentStatus() {
+    this.roomData.paymentStatus = !this.roomData.paymentStatus;
+  }
   constructor() {}
 
   ngOnChanges(changes: SimpleChanges): void {
