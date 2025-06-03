@@ -26,48 +26,50 @@
     </div>
   </div>
 
-  <div class="flex items-center p-6 bg-white rounded-lg shadow mb-6">
-    <h1 class="text-lg font-semibold mr-4">Sensors Status:</h1>
-    <div class="flex items-center space-x-6">
-      <div class="flex items-center">
-        <p class="text-lg font-semibold mr-2">Electricity:</p>
-        <div class="flex items-center bg-gray-200 rounded-lg p-1">
+  <div class="flex items-center p-6 bg-white rounded-xl shadow-lg mb-6 border border-gray-100">
+    <h1 class="text-xl font-bold text-gray-800 mr-6">Sensors Status:</h1>
+    <div class="flex items-center space-x-8">
+      <!-- Electricity Sensor -->
+      <div class="flex items-center bg-gray-50 rounded-lg px-4 py-2 shadow-sm transition-all duration-300 hover:shadow-md">
+        <p class="text-base font-semibold text-gray-700 mr-3">Electricity</p>
+        <div class="flex items-center">
           <span
-            class="w-3 h-3 rounded-full m-1"
+            class="w-4 h-4 rounded-full mr-2 transition-colors duration-200"
             [ngClass]="{
               'bg-green-500': elecRssi >= -100,
               'bg-red-500': elecRssi < -100
             }"
           ></span>
           <p
-            class="text-lg"
+            class="text-base font-medium"
             [ngClass]="{
-              'text-green-500': elecRssi >= -100,
-              'text-red-500': elecRssi < -100
+              'text-green-600': elecRssi >= -100,
+              'text-red-600': elecRssi < -100
             }"
           >
-            {{ elecRssi }}
+            {{ elecRssi }} dBm
           </p>
         </div>
       </div>
-      <div class="flex items-center">
-        <p class="text-lg font-semibold mr-2">Water:</p>
-        <div class="flex items-center bg-gray-200 rounded-lg p-1">
+      <!-- Water Sensor -->
+      <div class="flex items-center bg-gray-50 rounded-lg px-4 py-2 shadow-sm transition-all duration-300 hover:shadow-md">
+        <p class="text-base font-semibold text-gray-700 mr-3">Water</p>
+        <div class="flex items-center">
           <span
-            class="w-3 h-3 rounded-full m-1"
+            class="w-4 h-4 rounded-full mr-2 transition-colors duration-200"
             [ngClass]="{
               'bg-green-500': waterRssi >= -100,
               'bg-red-500': waterRssi < -100
             }"
           ></span>
           <p
-            class="text-lg"
+            class="text-base font-medium"
             [ngClass]="{
-              'text-green-500': waterRssi >= -100,
-              'text-red-500': waterRssi < -100
+              'text-green-600': waterRssi >= -100,
+              'text-red-600': waterRssi < -100
             }"
           >
-            {{ waterRssi }}
+            {{ waterRssi }} dBm
           </p>
         </div>
       </div>
