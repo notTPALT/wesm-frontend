@@ -41,6 +41,7 @@ export class ElectricityBriefComponent implements OnChanges {
   public electricityOptions: ChartConfiguration['options'] = {
     responsive: true,
     maintainAspectRatio: false,
+    animation: false,
     scales: {
       y: {
         beginAtZero: true,

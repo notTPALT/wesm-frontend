@@ -41,6 +41,7 @@ export class WaterBriefComponent implements OnChanges {
   public waterOptions: ChartConfiguration['options'] = {
     responsive: true,
     maintainAspectRatio: false,
+    animation: false,
     scales: {
       y: {
         beginAtZero: true,
