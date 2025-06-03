@@ -123,6 +123,7 @@ export class DashboardComponent implements OnInit {
         ((roomBrief.waterCurrent ?? 0) - (roomBrief.waterPast ?? 0)) * 15000;
       roomBrief.totalDue =
         roomBrief.totalDue || roomBrief.elecDue + roomBrief.waterDue;
+      roomBrief.paymentStatus = (index % 2 === 0) ? false : true;
     } catch (error) {
       console.error(
         `Unable to get completed data for room ${index}. Error: `,

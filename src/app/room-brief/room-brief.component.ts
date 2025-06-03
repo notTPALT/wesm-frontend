@@ -17,7 +17,6 @@ export class RoomBriefComponent implements OnChanges {
   @Input() elecFetchedUsage!: number[][];
   @Input() waterFetchedUsage!: number[][];
   showRoomDetails: boolean = false;
-  isPaid: boolean = false;
 
   toggleRoomDetails() {
     this.showRoomDetails = !this.showRoomDetails;
@@ -25,6 +24,5 @@ export class RoomBriefComponent implements OnChanges {
   constructor() {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.isPaid = (Number(this.roomData.roomName?.slice(2)[0]) % 2) ? true : false;
   }
 }

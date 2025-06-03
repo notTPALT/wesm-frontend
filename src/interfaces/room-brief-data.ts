@@ -6,5 +6,6 @@ export interface RoomBriefData {
     waterCurrent?: number,
     elecDue?: number,
     waterDue?: number,
-    totalDue?: number
+    totalDue?: number,
+    paymentStatus: boolean
 }
