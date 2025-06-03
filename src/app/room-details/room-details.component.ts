@@ -158,7 +158,7 @@ export class RoomDetailsComponent implements OnChanges {
     // Add room data table using autoTable
     autoTable(pdf, {
       startY: yPosition,
-      head: [['Utility', 'Past', 'Current', 'Usage', 'Due']],
+      head: [['Utility', 'Past', 'Current', 'Usage', 'Price', 'Due']],
       body: [
         [
           'Electricity',
@@ -167,6 +167,7 @@ export class RoomDetailsComponent implements OnChanges {
           `${
             (this.roomData.elecCurrent ?? 0) - (this.roomData.elecPast ?? 0)
           } kWh`,
+          '3500 VND',
           {
             content: `${this.roomData.elecDue} VND`,
             styles: { textColor: [220, 38, 38] },
@@ -179,12 +180,14 @@ export class RoomDetailsComponent implements OnChanges {
           `${
             (this.roomData.waterCurrent ?? 0) - (this.roomData.waterPast ?? 0)
           } m³`,
+          '15000 VND',
           {
             content: `${this.roomData.waterDue} VND`,
             styles: { textColor: [220, 38, 38] },
           },
         ],
         [
+          '',
           '',
           '',
           '',
