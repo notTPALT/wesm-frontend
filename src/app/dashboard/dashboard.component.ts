@@ -29,8 +29,8 @@ export class DashboardComponent implements OnInit {
   private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
   public roomsBriefData: RoomBriefData[] = [];
   public filteredRoomsBriefData: RoomBriefData[] = [];
-  public totalWaterUsageLast30Days: number = -1;
-  public totalElecUsageLast30Days: number = -1;
+  public totalWaterUsageThisCycle: number = -1;
+  public totalElecUsageThisCycle: number = -1;
   public chartLabels: string[] = [];
   public elecChartData: number[] = [];
   public waterChartData: number[] = [];
@@ -42,8 +42,8 @@ export class DashboardComponent implements OnInit {
   async ngOnInit() {
     await Promise.all([
       this.getBriefAllRooms(),
-      this.getTotalWaterUsageLast30Days(),
-      this.getTotalElecUsageLast30Days(),
+      this.getTotalWaterUsageThisCycle(),
+      this.getTotalElecUsageThisCycle(),
       this.buildChartLabels(),
       this.buildElecChartData(6),
       this.buildWaterChartData(6),
@@ -155,24 +155,22 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  private async getTotalWaterUsageLast30Days() {
-    var latest: number = 0;
-
+  private async getTotalWaterUsageThisCycle() {
+    let latest: number = 0;
+    const currentDate = new Date();
+    const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1, 0, 0, 0, 0);
+  
     try {
       for (let i = 1; i <= 6; i++) {
-        let a = await lastValueFrom(
-          this.sensorDataService.fetchWaterData(`water${i}`)
-        );
+        let a = await lastValueFrom(this.sensorDataService.fetchWaterData(`water${i}`));
         if (a) {
           latest += a[0]?.water ?? 0;
         }
-
+  
         let b = await lastValueFrom(
           this.sensorDataService.fetchWaterData(
             `water${i}`,
-            new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000)
-              .toISOString()
-              .slice(0, 10)
+            startOfMonth.toISOString().slice(0, 10)
           )
         );
         if (b) {
@@ -180,30 +178,28 @@ export class DashboardComponent implements OnInit {
         }
       }
     } catch (error) {
-      console.error('Error while fetching total water usage: ', error);
+      console.error('Error while fetching total water usage this month: ', error);
     }
-
-    this.totalWaterUsageLast30Days = Math.floor(latest);
+  
+    this.totalWaterUsageThisCycle = Math.floor(latest);
   }
-
-  private async getTotalElecUsageLast30Days() {
-    var latest: number = 0;
-
+  
+  private async getTotalElecUsageThisCycle() {
+    let latest: number = 0;
+    const currentDate = new Date();
+    const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1, 0, 0, 0, 0);
+  
     try {
       for (let i = 1; i <= 6; i++) {
-        let a = await lastValueFrom(
-          this.sensorDataService.fetchElecData(`power${i}`)
-        );
+        let a = await lastValueFrom(this.sensorDataService.fetchElecData(`power${i}`));
         if (a) {
           latest += a[0]?.power ?? 0;
         }
-
+  
         let b = await lastValueFrom(
           this.sensorDataService.fetchElecData(
             `power${i}`,
-            new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000)
-              .toISOString()
-              .slice(0, 10)
+            startOfMonth.toISOString().slice(0, 10)
           )
         );
         if (b) {
@@ -211,10 +207,10 @@ export class DashboardComponent implements OnInit {
         }
       }
     } catch (error) {
-      console.error('Error while fetching total electricity usage: ', error);
+      console.error('Error while fetching total electricity usage this month: ', error);
     }
-
-    this.totalElecUsageLast30Days = Math.floor(latest);
+  
+    this.totalElecUsageThisCycle = Math.floor(latest);
   }
 
   private async buildChartLabels() {
