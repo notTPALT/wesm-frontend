@@ -1,11 +1,12 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ChartConfiguration, ChartData } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-water-brief',
   standalone: true,
-  imports: [BaseChartDirective],
+  imports: [BaseChartDirective, FormsModule],
   templateUrl: './water-brief.component.html',
   styleUrl: './water-brief.component.css',
 })
@@ -13,21 +14,30 @@ export class WaterBriefComponent implements OnChanges {
   @Input() chartLabels: string[] = [];
   @Input() chartData: number[] = [];
 
-  // Water chart data
-  public waterData: ChartData<'bar'> = {
+  public horizontalLineValue: number | null = 50;
+
+  public waterData: ChartData<'bar' | 'line'> = {
     labels: [],
     datasets: [
       {
-        label: 'Water (m³)',
+        label: 'Below Threshold (m³)',
         data: [],
-        backgroundColor: 'rgba(34, 197, 94, 0.6)', // Green
+        backgroundColor: 'rgba(34, 197, 94, 0.6)', // Green for below threshold
         borderColor: 'rgba(34, 197, 94, 1)',
         borderWidth: 1,
+        stack: 'combined',
+      },
+      {
+        label: 'Above Threshold (m³)',
+        data: [],
+        backgroundColor: 'rgba(255, 0, 0, 0.6)', // Red for above threshold
+        borderColor: 'rgba(255, 0, 0, 1)',
+        borderWidth: 1,
+        stack: 'combined',
       },
     ],
   };
 
-  // Water chart options
   public waterOptions: ChartConfiguration['options'] = {
     responsive: true,
     maintainAspectRatio: false,
@@ -35,6 +45,7 @@ export class WaterBriefComponent implements OnChanges {
       y: {
         beginAtZero: true,
         title: { display: true, text: 'm³' },
+        stacked: true,
       },
       x: {
         title: { display: true, text: 'Day' },
@@ -52,19 +63,58 @@ export class WaterBriefComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['chartLabels'] || changes['chartData']) {
-      this.waterData = {
-        labels: this.chartLabels || [],
-        datasets: [
-          {
-            label: 'Water (m³)',
-            data: this.chartData || [],
-            backgroundColor: 'rgba(34, 197, 94, 0.6)',
-            borderColor: 'rgba(34, 197, 94, 1)',
-            borderWidth: 1,
-          },
-        ],
-      };
-      console.log('Updated waterData:', this.waterData);
+      this.updateChartData();
     }
+  }
+
+  updateHorizontalLine(): void {
+    this.updateChartData();
+  }
+
+  private updateChartData(): void {
+    const labels = this.chartLabels || [];
+    const data = this.chartData || [];
+    const threshold = this.horizontalLineValue || 0;
+
+    const belowThresholdData = data.map((value) => Math.min(value, threshold));
+    const aboveThresholdData = data.map((value) => Math.max(0, value - threshold));
+
+    const belowThresholdDataset = {
+      label: 'Below Threshold (m³)',
+      data: belowThresholdData,
+      backgroundColor: 'rgba(34, 197, 94, 0.6)', // Green
+      borderColor: 'rgba(34, 197, 94, 1)',
+      borderWidth: 1,
+      stack: 'combined',
+    };
+    const aboveThresholdDataset = {
+      label: 'Above Threshold (m³)',
+      data: aboveThresholdData,
+      backgroundColor: 'rgba(255, 0, 0, 0.6)', // Red
+      borderColor: 'rgba(255, 0, 0, 1)',
+      borderWidth: 1,
+      stack: 'combined',
+    };
+
+    const horizontalLineDataset =
+      this.horizontalLineValue !== null
+        ? {
+            label: 'Threshold',
+            data: Array(labels.length).fill(this.horizontalLineValue),
+            type: 'line' as const,
+            borderColor: 'red',
+            borderWidth: 2,
+            fill: false,
+            pointRadius: 0,
+            borderDash: [5, 5],
+          }
+        : null;
+
+    this.waterData = {
+      labels: labels,
+      datasets: horizontalLineDataset
+        ? [belowThresholdDataset, aboveThresholdDataset, horizontalLineDataset]
+        : [belowThresholdDataset, aboveThresholdDataset],
+    };
   }
 }
