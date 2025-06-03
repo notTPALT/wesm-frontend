@@ -24,12 +24,16 @@
       <!-- </p> -->
     </div>
     <p class="text-sm text-red-500">Total Due: {{ roomData.totalDue }} VND</p>
-    <button
-      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      (click)="toggleRoomDetails()"
-    >
-      Details
-    </button>
+    <div class="flex justify-between items-center">
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        (click)="toggleRoomDetails()"
+      >
+        Details
+      </button>
+      <a class="text-green-500 font-bold py-2 px-4" *ngIf="isPaid">Paid</a>
+      <a class="text-red-500 font-bold py-2 px-4" *ngIf="!isPaid">Unpaid</a>
+    </div>
     <app-room-details
       *ngIf="showRoomDetails"
       [chartLabels]="chartLabels"

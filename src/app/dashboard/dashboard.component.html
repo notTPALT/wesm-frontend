@@ -1,6 +1,5 @@
 <div class="p-6">
   <!-- Stats Cards -->
-  <h1 class="gap-6 mb-6 ml-4 text-lg font-semibold">In the last 30 days:</h1>
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
     <div class="bg-white p-6 rounded-lg shadow">
       <h3 class="text-lg font-semibold text-gray-700">
@@ -27,6 +26,54 @@
     </div>
   </div>
 
+  <div class="flex items-center p-6 bg-white rounded-lg shadow mb-6">
+    <h1 class="text-lg font-semibold mr-4">Sensors Status:</h1>
+    <div class="flex items-center space-x-6">
+      <div class="flex items-center">
+        <p class="text-lg font-semibold mr-2">Electricity:</p>
+        <div class="flex items-center bg-gray-200 rounded-lg p-1">
+          <span
+            class="w-3 h-3 rounded-full m-1"
+            [ngClass]="{
+              'bg-green-500': elecSensorStatus,
+              'bg-red-500': !elecSensorStatus
+            }"
+          ></span>
+          <p
+            class="text-lg"
+            [ngClass]="{
+              'text-green-500': elecSensorStatus,
+              'text-red-500': !elecSensorStatus
+            }"
+          >
+            {{ elecSensorStatus ? "active" : "inactive" }}
+          </p>
+        </div>
+      </div>
+      <div class="flex items-center">
+        <p class="text-lg font-semibold mr-2">Water:</p>
+        <div class="flex items-center bg-gray-200 rounded-lg p-1">
+          <span
+            class="w-3 h-3 rounded-full m-1"
+            [ngClass]="{
+              'bg-green-500': waterSensorStatus,
+              'bg-red-500': !waterSensorStatus
+            }"
+          ></span>
+          <p
+            class="text-lg"
+            [ngClass]="{
+              'text-green-500': waterSensorStatus,
+              'text-red-500': !waterSensorStatus
+            }"
+          >
+            {{ waterSensorStatus ? "active" : "inactive" }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Room Blocks and Charts -->
   <div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
     <!-- Room Blocks -->
@@ -38,6 +85,7 @@
           type="text"
           placeholder="Search rooms..."
           class="w-64 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 ml-2"
+          (input)="filterRooms(filter.value)"
         />
         <button
           class="w-20 py-2 border border-gray-300 rounded-lg bg-blue-500 ml-2 text-white"

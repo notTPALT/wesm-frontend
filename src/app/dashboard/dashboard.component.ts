@@ -29,6 +29,8 @@ export class DashboardComponent implements OnInit {
   public waterChartData: number[] = [];
   public elecFetchedUsage: number[][] = [];
   public waterFetchedUsage: number[][] = [];
+  public elecSensorStatus: boolean = false;
+  public waterSensorStatus: boolean = true;
 
   async ngOnInit() {
     await Promise.all([
