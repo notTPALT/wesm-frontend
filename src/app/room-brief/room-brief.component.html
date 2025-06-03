@@ -1,30 +1,22 @@
-<div class="border rounded-lg p-4">
+<div class="border rounded-lg p-4 w-full">
   <h4 class="text-md font-semibold text-gray-800 mb-2">
     Room {{ roomData.roomName }}
   </h4>
-  <div class="space-y-2">
+  <div class="space-y-2 w-full">
     <div>
       <p class="text-sm font-medium text-gray-700">Electricity usage:</p>
       <p class="text-sm text-gray-600">
         {{ (roomData.elecCurrent ?? 0) - (roomData.elecPast ?? 0) }} kWh
       </p>
-      <!-- <p class="text-sm text-gray-600">Past: <b>{{ roomData.elecPast }}</b> kWh</p>
-      <p class="text-sm text-gray-600">
-        Current: <b>{{ roomData.elecCurrent }}</b> kWh
-      </p> -->
     </div>
     <div>
       <p class="text-sm font-medium text-gray-700">Water usage:</p>
       <p class="text-sm text-gray-600">
         {{ (roomData.waterCurrent ?? 0) - (roomData.waterPast ?? 0) }} m³
       </p>
-      <!-- <p class="text-sm text-gray-600">Past: <b>{{ roomData.waterPast }}</b> m³</p>
-      <p class="text-sm text-gray-600">
-        Current: <b>{{ roomData.waterCurrent }}</b> m³ -->
-      <!-- </p> -->
     </div>
     <p class="text-sm text-red-500">Total Due: {{ roomData.totalDue }} VND</p>
-    <div class="flex flex-row justify-between items-center max-w">
+    <div class="flex flex-row flex-wrap justify-between items-center w-full gap-x-4">
       <button
         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded hover:cursor-pointer"
         (click)="toggleRoomDetails()"
